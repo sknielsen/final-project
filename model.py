@@ -31,7 +31,7 @@ class Trip(db.Model):
     name = db.Column(db.String(64), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     location = db.Column(db.String(64), nullable=False)
-    date = db.Column(db.DateTime)
+    date = db.Column(db.Date)
 
     # Define relationship to user
     user = db.relationship("User",

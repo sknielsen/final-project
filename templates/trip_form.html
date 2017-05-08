@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h2>New Trip</h2>
+    <form id="trip_form" action="/add-trip" method="POST">Name: 
+      <input type="text" id="name" name="name"><br>Location: 
+      <input type="text" id="location" name="location"><br>Date:
+      <input type="date" id="date" name="date"><br>
+      <input type="submit" id="submit_button">
+    </form>
+
+{% endblock %}

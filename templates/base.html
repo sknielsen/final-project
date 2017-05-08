@@ -8,7 +8,7 @@
 <body>
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-            {% if 'logged_in_email' in session %}
+            {% if 'logged_in_user' in session %}
                 <li><a href="/logout">Log Out</a></li>
             {% else %}
                 <li><a href="/login-form">Log In</a></li>

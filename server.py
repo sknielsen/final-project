@@ -16,11 +16,19 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """Homepage."""
-    return render_template("homepage.html")
+    if session.get('logged_in_user') is not None:
+        user_id = session['logged_in_user']
+        user_trips = Trip.query.filter_by(user_id=user_id).all()
+    else:
+        user_trips = []
+
+    return render_template("homepage.html", trips=user_trips)
+
 
 @app.route('/create-account', methods=['GET'])
 def create_account():
     """ Allows user to create a new account """
+
     return render_template('create_account.html')
 
 
@@ -41,15 +49,16 @@ def check_create():
         new_user = User(email=user_email, password=user_password, name=name)
         db.session.add(new_user)
         db.session.commit()
-        session['logged_in_email'] = user_email
+        user = User.query.filter_by(email=user_email).one()
+        session['logged_in_user'] = user.user_id
         flash('You are now registered and logged in!')
-        return redirect('/users/%s' % (user.user_id))
+        return redirect('/')
 
 
 @app.route('/logout')
 def logout():
     """Logs out user"""
-    del session['logged_in_email']
+    del session['logged_in_user']
     flash("You are now logged out.")
     return redirect('/')
 
@@ -71,9 +80,9 @@ def check_login():
     try:
         user = User.query.filter_by(email=user_email).one()
         if user.password == user_password:
-            session['logged_in_email'] = user_email
+            session['logged_in_user'] = user.user_id
             flash('Hello, %s' % (user.name))
-            return redirect('/users/%s' % (user.user_id))
+            return redirect('/')
         else:
             flash('Wrong password!')
             return redirect('/login-form')
@@ -83,19 +92,42 @@ def check_login():
         return redirect('/create-account')
 
 
-@app.route('/users/<user_id>')
-def user_profile(user_id):
-    """Displays a user's profile """
-    user = User.query.get(user_id)
+# @app.route('/users/<user_id>')
+# def user_profile(user_id):
+#     """Displays a user's profile """
+#     user = User.query.get(user_id)
 
-    user_trips = user.trips
+    # user_trips = user.trips
     # user_ratings = []
     # for rating in ratings:
     #     user_ratings.append((rating.movie.title, rating.score))
 
     # return render_template('user_profile.html', user_age=user_age, user_zip=user_zip,
                             # user_ratings=user_ratings)
-    return render_template('user_profile.html', trips=user_trips)
+    # return render_template('user_profile.html', trips=user_trips)
+
+
+@app.route('/add-trip')
+def new_trip():
+    """Form that gets info for new trip"""
+
+    return render_template('trip_form.html')
+
+
+@app.route('/add-trip', methods=['POST'])
+def add_trip():
+    """Add new trip from info in form"""
+
+    name = request.form.get('name')
+    location = request.form.get('location')
+    date = request.form.get('date')
+    user_id = session['logged_in_user']
+
+    trip = Trip(location=location, date=date, name=name, user_id=user_id)
+    db.session.add(trip)
+    db.session.commit()
+
+    return redirect('/')
 
 
 if __name__ == "__main__":
