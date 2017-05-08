@@ -51,7 +51,7 @@ def check_create():
         db.session.commit()
         user = User.query.filter_by(email=user_email).one()
         session['logged_in_user'] = user.user_id
-        flash('You are now registered and logged in!')
+        flash('Welcome, %s' % (user.name))
         return redirect('/')
 
 
@@ -92,21 +92,6 @@ def check_login():
         return redirect('/create-account')
 
 
-# @app.route('/users/<user_id>')
-# def user_profile(user_id):
-#     """Displays a user's profile """
-#     user = User.query.get(user_id)
-
-    # user_trips = user.trips
-    # user_ratings = []
-    # for rating in ratings:
-    #     user_ratings.append((rating.movie.title, rating.score))
-
-    # return render_template('user_profile.html', user_age=user_age, user_zip=user_zip,
-                            # user_ratings=user_ratings)
-    # return render_template('user_profile.html', trips=user_trips)
-
-
 @app.route('/add-trip')
 def new_trip():
     """Form that gets info for new trip"""
@@ -129,6 +114,13 @@ def add_trip():
 
     return redirect('/')
 
+@app.route('/trip/<trip_id>')
+def view_trip(trip_id):
+    """Show entries for a trip"""
+
+    entries = Entry.query.filter_by(trip_id=trip_id).all()
+
+    return render_template('view_trip.html', entries=entries)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

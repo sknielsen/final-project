@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Entries</h3>
+    {% if not entries %}
+    <p>You dont have any entries yet!</p>
+    {% else %}
+      <ul> 
+        {% for entry in entries %}
+          <li>
+          <p>{{ entry.name }}</p>
+          <p>{{ entry.category }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <p><a href="/add-entry">Add new trip</a></p>
+
+{% endblock %}

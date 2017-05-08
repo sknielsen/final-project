@@ -10,7 +10,7 @@
       <ul> 
         {% for trip in trips %}
           <li>
-          <p>{{ trip.name }}</p>
+          <p><a href="/trip/{{ trip.trip_id }}">{{ trip.name }}</a></p>
           <p>{{ trip.location }}</p>
           <p>{{ trip.date }}</p>
           </li>
