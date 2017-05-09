@@ -31,6 +31,7 @@ class Trip(db.Model):
     name = db.Column(db.String(64), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     location = db.Column(db.String(64), nullable=False)
+    notes = db.Column(db.String(255), nullable=True)
     date = db.Column(db.Date)
 
     # Define relationship to user
@@ -53,7 +54,7 @@ class Entry(db.Model):
     trip_id = db.Column(db.Integer, db.ForeignKey('trips.trip_id'))
     name = db.Column(db.String(64), nullable=False)
     address = db.Column(db.String(64), nullable=False)
-    note = db.Column(db.String(255), nullable=True)
+    notes = db.Column(db.String(255), nullable=True)
     photo_location = db.Column(db.String(255),  nullable=False)
     type_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))
 
@@ -85,6 +86,31 @@ class Category(db.Model):
         """Provide helpful representation when printed."""
 
         return "<Category name=%s>" % (self.name)
+
+
+class Share(db.Model):
+    """Shows who can view what trip"""
+
+    __tablename__ = "shares"
+
+    share_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    viewer_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    trip_id = db.Column(db.Integer, db.ForeignKey('trips.trip_id'))
+
+    # Define relationship to trip
+    trip = db.relationship("Trip",
+                            backref=db.backref("shares",
+                                               order_by=share_id))
+
+    # Define relationship to user
+    user = db.relationship("User",
+                            backref=db.backref("shares",
+                                               order_by=share_id))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Trip=%s shared with user=%s>" % (self.trip_id.trip.name, self.user_id.user.name)
 
 ##############################################################################
 # Helper functions

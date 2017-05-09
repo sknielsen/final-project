@@ -11,7 +11,7 @@ def load_categories():
     Category.query.delete()
 
     # Read u.user file and insert data
-    for row in open("category.txt"):
+    for row in open("categories.txt"):
         row = row.rstrip()
         name = row
 
