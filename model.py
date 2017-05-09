@@ -62,6 +62,11 @@ class Entry(db.Model):
                             backref=db.backref("entries",
                                                order_by=entry_id))
 
+    # Define relationship to category
+    category = db.relationship("Category",
+                            backref=db.backref("entries",
+                                               order_by=entry_id))
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
