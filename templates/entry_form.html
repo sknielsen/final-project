@@ -2,7 +2,7 @@
 {% block content %}
 
     <h2>New Entry</h2>
-    <form id="entry_form" action="/add-entry" method="POST">Name: 
+    <form id="entry_form" action="/add-entry/{{ trip_id }}" method="POST" enctype="multipart/form-data">Name: 
       <input type="text" id="name" name="name" required><br>Address: 
       <input type="text" id="address" name="address" required><br>
       <textarea name="notes">Add any notes...</textarea><br>
@@ -14,7 +14,7 @@
           <option value="4">Attraction</option>
           <option value="5">Other</option>
       </select><br>
-      <input type="file" name="pic" accept="image/*"><br>
+      <input type="file" id="imageinput" name="pic"><br>
       <input type="submit" id="submit_button">
     </form>
 

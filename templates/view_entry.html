@@ -3,9 +3,10 @@
 
 <h2>{{ entry.name }}</h2>
 <h3>{{ entry.address }}</h3>
-<!-- <h3>{{ entry.notes }}</h3>
-<img src="{{ entry.photo_location }}">
-<img src="/static/images/category {{ entry.type_id }}"> -->
+<h3>{{ entry.notes }}</h3>
+<h3>{{ entry.type_id }}</h3>
+<img src="/{{ entry.photo_location }}" height="300">
+<!-- <img src="/static/images/category {{ entry.type_id }}"> -->
 
-<a href="/trip/{{ entry.trip_id }}">Back to trip</a>
+<br><a href="/trip/{{ entry.trip_id }}">Back to trip</a>
 {% endblock %}

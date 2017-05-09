@@ -1,8 +1,9 @@
 from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash,
-                   session)
+                   session, url_for)
 from model import User, Trip, Entry, Category, connect_to_db, db
-
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -11,6 +12,14 @@ app = Flask(__name__)
 app.secret_key = 'abcde'
 
 app.jinja_env.undefined = StrictUndefined
+UPLOAD_FOLDER = 'static/images/'
+ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/')
@@ -139,19 +148,33 @@ def add_entry(trip_id):
     name = request.form.get('name')
     address = request.form.get('address')
     notes = request.form.get('notes')
-    # photo = request.form.get('photo')
     category = request.form.get('category')
 
-    # entry = Entry(trip_id=trip_id, name=name, address=address, notes=notes, photo_location=photo,
-    #               type_id=category)
-    # db.session.add(entry)
-    # db.session.commit()
+    entry = Entry(trip_id=trip_id, name=name, address=address, notes=notes,
+                  type_id=category)
+
+
+    db.session.add(entry)
+    db.session.commit()
+    # print entry.name
+    if 'pic' in request.files:
+        file = request.files['pic']
+        if file and allowed_file(file.filename):
+            # import pdb; pdb.set_trace()
+            ext = file.filename.rsplit('.', 1)[1].lower()
+            filename = str(trip_id) + '_' + str(entry.entry_id) + '.' + ext
+            # filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    entry.photo_location = UPLOAD_FOLDER + filename
+    db.session.commit()
+    print entry.photo_location
 
     return redirect('/trip/%s/%s' % (trip_id, entry.entry_id))
 
 
 @app.route('/trip/<trip_id>/<entry_id>')
-def view_entry(entry_id):
+def view_entry(trip_id, entry_id):
     """Show entry details"""
 
     entry = Entry.query.get(entry_id)

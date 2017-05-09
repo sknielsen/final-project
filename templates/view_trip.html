@@ -12,7 +12,7 @@
         {% for entry in entries %}
           <li>
           <p><a href="/trip/{{ trip.trip_id }}/{{ entry.entry_id }}">{{ entry.name }}</p>
-          <p>{{ entry.category }}</p>
+          <p>{{ entry.category.name }}</p>
           </li>
         {% endfor %}
       </ul>
