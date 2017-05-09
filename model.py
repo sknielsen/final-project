@@ -55,7 +55,7 @@ class Entry(db.Model):
     name = db.Column(db.String(64), nullable=False)
     address = db.Column(db.String(64), nullable=False)
     notes = db.Column(db.String(255), nullable=True)
-    photo_location = db.Column(db.String(255),  nullable=False)
+    photo_location = db.Column(db.String(255),  nullable=True)
     type_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))
 
     # Define relationship to trip

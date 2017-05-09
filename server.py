@@ -114,13 +114,50 @@ def add_trip():
 
     return redirect('/')
 
+
 @app.route('/trip/<trip_id>')
 def view_trip(trip_id):
     """Show entries for a trip"""
 
+    trip = Trip.query.get(trip_id)
     entries = Entry.query.filter_by(trip_id=trip_id).all()
 
-    return render_template('view_trip.html', entries=entries)
+    return render_template('view_trip.html', entries=entries, trip=trip)
+
+
+@app.route('/add-entry/<trip_id>')
+def new_entry(trip_id):
+    """Form that gets info for new trip"""
+
+    return render_template('entry_form.html', trip_id=trip_id)
+
+
+@app.route('/add-entry/<trip_id>', methods=['POST'])
+def add_entry(trip_id):
+    """Add new trip from info in form"""
+
+    name = request.form.get('name')
+    address = request.form.get('address')
+    notes = request.form.get('notes')
+    # photo = request.form.get('photo')
+    category = request.form.get('category')
+
+    # entry = Entry(trip_id=trip_id, name=name, address=address, notes=notes, photo_location=photo,
+    #               type_id=category)
+    # db.session.add(entry)
+    # db.session.commit()
+
+    return redirect('/trip/%s/%s' % (trip_id, entry.entry_id))
+
+
+@app.route('/trip/<trip_id>/<entry_id>')
+def view_entry(entry_id):
+    """Show entry details"""
+
+    entry = Entry.query.get(entry_id)
+
+    return render_template('view_entry.html', entry=entry)
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h2>New Entry</h2>
+    <form id="entry_form" action="/add-entry" method="POST">Name: 
+      <input type="text" id="name" name="name" required><br>Address: 
+      <input type="text" id="address" name="address" required><br>
+      <textarea name="notes">Add any notes...</textarea><br>
+      <select name="category">
+         <option selected disabled>Select a category</option>
+          <option value="1">Restaurant</option>
+          <option value="2">Bar</option>
+          <option value="3">Accommodation</option>
+          <option value="4">Attraction</option>
+          <option value="5">Other</option>
+      </select><br>
+      <input type="file" name="pic" accept="image/*"><br>
+      <input type="submit" id="submit_button">
+    </form>
+
+{% endblock %}
