@@ -1,0 +1,5 @@
+Restaurant
+Bar
+Accommodation
+Attraction
+Other
