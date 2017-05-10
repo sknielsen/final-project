@@ -11,7 +11,7 @@
       <ul> 
         {% for entry in entries %}
           <li class="entry">
-          <p class="entry-name"><a href="/trip/{{ trip.trip_id }}/{{ entry.entry_id }}">{{ entry.name }}</a></p>
+          <p class="entry-link"><a href="/trip/{{ trip.trip_id }}/{{ entry.entry_id }}" class="entry-name">{{ entry.name }}</a></p>
           <p>{{ entry.category.name }}</p>
           <div class="entry-address" hidden>{{ entry.address }}</div>
           </li>
@@ -31,44 +31,48 @@
           zoom: 10
         }
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
-        codeAddress(tripLocation);
+        codeCenterAddress(tripLocation);
+        addMarkers();
       }
 
-      function codeAddress(address) 
-      {
+      function codeCenterAddress(address) {
         geocoder.geocode( {address:address}, function(results, status) 
         {
           if (status == google.maps.GeocoderStatus.OK) 
           {
             map.setCenter(results[0].geometry.location);//center the map over the result
-            //place a marker at the location
-            // var marker = new google.maps.Marker(
-            // {
-            //     map: map,
-            //     position: results[0].geometry.location
-            // });
           } else {
             alert('Geocode was not successful for the following reason: ' + status);
          }
         });
       }
 
-      //   var marker = new google.maps.Marker({
-      //     position: myLatLng,
-      //     map: map,
-      //     title: 'Hello World!'
-      //   });
-      // }
+      function codeMarkerAddress(address, name) {
+        geocoder.geocode( {address:address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            // map.setCenter(results[0].geometry.location);//center the map over the result
+            // place a marker at the location
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location,
+                title: name
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+         }
+        });
+      }
 
-      // $( ".entry" ).each(function() {
-      //   var address = $(this).children("entry-address").html();
-      //   var name = $(this).children("entry-name").html();
-      //   var marker = new google.maps.Marker({
-      //     position: codeAddress(address),
-      //     map: map,
-      //     title: name
-      //   })
-      // })
+
+      function addMarkers() {
+        $( ".entry" ).each(function() {
+        var address = $(this).children(".entry-address").html();
+        var name = $(this).children(".entry-link").children(".entry-name").html();
+        // console.log(codeAddress(address));
+        codeMarkerAddress(address, name);
+        // })
+      });
+      }
 
 
     </script>
