@@ -2,7 +2,7 @@
 {% block content %}
 
 <h2>{{ trip.name }}</h2>
-<h3>{{ trip.location }}</h3>
+<h3 id="trip-location">{{ trip.location }}</h3>
 <h3>{{ trip.date }}</h3>
 <h3>Entries</h3>
     {% if not entries %}
@@ -10,13 +10,70 @@
     {% else %}
       <ul> 
         {% for entry in entries %}
-          <li>
-          <p><a href="/trip/{{ trip.trip_id }}/{{ entry.entry_id }}">{{ entry.name }}</p>
+          <li class="entry">
+          <p class="entry-name"><a href="/trip/{{ trip.trip_id }}/{{ entry.entry_id }}">{{ entry.name }}</a></p>
           <p>{{ entry.category.name }}</p>
+          <div class="entry-address" hidden>{{ entry.address }}</div>
           </li>
         {% endfor %}
       </ul>
     {% endif %}
     <p><a href="/add-entry/{{ trip.trip_id }}">Add new Entry</a></p>
+    <div id="map"></div>
+    <script>
+
+      var tripLocation = $( '#trip-location' ).html();
+
+      function initMap() {
+        geocoder = new google.maps.Geocoder();
+        var mapOptions = 
+        {
+          zoom: 10
+        }
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        codeAddress(tripLocation);
+      }
+
+      function codeAddress(address) 
+      {
+        geocoder.geocode( {address:address}, function(results, status) 
+        {
+          if (status == google.maps.GeocoderStatus.OK) 
+          {
+            map.setCenter(results[0].geometry.location);//center the map over the result
+            //place a marker at the location
+            // var marker = new google.maps.Marker(
+            // {
+            //     map: map,
+            //     position: results[0].geometry.location
+            // });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+         }
+        });
+      }
+
+      //   var marker = new google.maps.Marker({
+      //     position: myLatLng,
+      //     map: map,
+      //     title: 'Hello World!'
+      //   });
+      // }
+
+      // $( ".entry" ).each(function() {
+      //   var address = $(this).children("entry-address").html();
+      //   var name = $(this).children("entry-name").html();
+      //   var marker = new google.maps.Marker({
+      //     position: codeAddress(address),
+      //     map: map,
+      //     title: name
+      //   })
+      // })
+
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&callback=initMap">
+    </script>
 
 {% endblock %}
