@@ -20,8 +20,34 @@
         {% endfor %}
       </ul>
     {% endif %}
-    <p><a href="/add-entry/{{ trip.trip_id }}">Add new Entry</a></p>
-    <div id="map"></div>
+    <!-- <p><a href="/add-entry/{{ trip.trip_id }}">Add new Entry</a></p> -->
+    <button id="createEntry">Add new Entry</button>
+                  
+    <div id="entry-map"></div>
+    <div id="entry-form-popup" class="modal">
+        <!-- Modal content -->
+        <div class="entry-form-content">
+          <span class="close">&times;</span>
+          <h2>New Entry</h2>
+            <form id="entry_form" action="/add-entry/{{ trip.trip_id }}" method="POST" enctype="multipart/form-data"> 
+<input id="autocomplete" placeholder="Enter your address"
+         type="text">
+                <br>Address: 
+              <input type="text" id="address" name="address" required><br>
+              <textarea name="notes">Add any notes...</textarea><br>
+              <select name="category">
+                 <option selected disabled>Select a category</option>
+                  <option value="1">Restaurant</option>
+                  <option value="2">Bar</option>
+                  <option value="3">Accommodation</option>
+                  <option value="4">Attraction</option>
+                  <option value="5">Other</option>
+              </select><br>
+              <input type="file" id="imageinput" name="pic"><br>
+              <input type="submit" id="submit_button">
+            </form>
+          </div>
+      </div>
     <script>
 
       var tripLocation = $( '#trip-location' ).html();
@@ -32,12 +58,42 @@
         {
           zoom: 11
         }
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        map = new google.maps.Map(document.getElementById('entry-map'), mapOptions);
         codeCenterAddress(tripLocation);
         addMarkers();
       }
+      var placeSearch, autocomplete;
+
+      function initAutocomplete() {
+        // Create the autocomplete object, restricting the search to geographical
+        // location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+            {types: ['establishment']});
+
+        // When the user selects an address from the dropdown, populate the address
+        // fields in the form.
+      }
+      // $('#autocomplete').focus( geolocate);
+
+      // function geolocate() {
+      //   if (navigator.geolocation) {
+      //     navigator.geolocation.getCurrentPosition(function(position) {
+      //       var geolocation = {
+      //         lat: position.coords.latitude,
+      //         lng: position.coords.longitude
+      //       };
+      //       var circle = new google.maps.Circle({
+      //         center: geolocation,
+      //         radius: position.coords.accuracy
+      //       });
+      //       autocomplete.setBounds(circle.getBounds());
+      //     });
+      //   } 
+      // }
 
       function codeCenterAddress(address) {
+        // Set the center of the map
         geocoder.geocode( {address:address}, function(results, status) 
         {
           if (status == google.maps.GeocoderStatus.OK) 
@@ -50,6 +106,7 @@
       }
 
       function codeMarkerAddress(address, name, contentString) {
+        // Change the marker address in to latlong and place parker at the latlong
         geocoder.geocode( {address:address}, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
             // map.setCenter(results[0].geometry.location);//center the map over the result
@@ -74,6 +131,7 @@
 
 
       function addMarkers() {
+        // Add markers for each entry to the map
         $( ".entry" ).each(function() {
         var address = $(this).children(".entry-address").html();
         var name = $(this).children(".entry-link").children(".entry-name").html();
@@ -95,9 +153,41 @@
       }
 
 
+      // Get the modal
+      var modal = document.getElementById('entry-form-popup');
+
+      // Get the button that opens the modal
+      var btn = document.getElementById("createEntry");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks on the button, open the modal 
+      btn.onclick = function() {
+          modal.style.display = "block";
+      }
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+          modal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+          if (event.target == modal) {
+              modal.style.display = "none";
+          }
+      }
+
+
+      function initialize() {
+         initMap();
+         initAutocomplete();
+      }
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&callback=initMap">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&libraries=places&callback=initialize" async defer></script>
+
+
+
 
 {% endblock %}

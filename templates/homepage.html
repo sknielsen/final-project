@@ -9,15 +9,78 @@
     {% else %}
       <ul> 
         {% for trip in trips %}
-          <li>
-          <p><a href="/trip/{{ trip.trip_id }}">{{ trip.name }}</a></p>
-          <p>{{ trip.location }}</p>
-          <p>{{ trip.date }}</p>
+          <li class="trip">
+          <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a></p>
+          <p class="trip-location">{{ trip.location }}</p>
+          <p class="trip-date">{{ trip.date }}</p>
           </li>
         {% endfor %}
       </ul>
     {% endif %}
     <p><a href="/add-trip">Add new trip</a></p>
+    <div id="trip-map"></div>
+        <script>
+
+      // var tripLocation = $( '#trip-location' ).html();
+
+      function initMap() {
+        geocoder = new google.maps.Geocoder();
+        loc = new google.maps.LatLng("30","5");
+        var mapOptions = 
+        {
+          zoom: 2,
+          center: loc
+        }
+        map = new google.maps.Map(document.getElementById('trip-map'), mapOptions);
+  
+        // codeCenterAddress(tripLocation);
+        addMarkers();
+      }
+
+      function codeMarkerAddress(address, name, contentString) {
+        geocoder.geocode( {address:address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            // place a marker at the location
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location,
+                title: name
+            });
+            var infowindow = new google.maps.InfoWindow({
+            content: contentString
+            });
+            marker.addListener('click', function() {
+            infowindow.open(map, marker);
+        });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+         }
+        });
+      }
+
+
+      function addMarkers() {
+        $( ".trip" ).each(function() {
+        var location = $(this).children(".trip-location").html();
+        var name = $(this).children(".trip-link").children(".trip-name").html();
+        var date = $(this).children(".trip-date").html();
+        var link = $(this).children(".trip-link").children(".trip-name").attr("href");
+        var contentString = '<div id="content">'+
+            '<h1><a href=\"'+link+'\">'+name+'</a></h1>'+
+            '<div id="bodyContent">'+
+            '<p>'+location+'</p>'+
+            '<p>'+date+'</p>'+
+            '</div>'+
+            '</div>';
+        codeMarkerAddress(location, name, contentString);
+      });
+      }
+
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&callback=initMap">
+    </script>
 {% else %}
     <h2>This is the homepage</h2>          
 {% endif %}
