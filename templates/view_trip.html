@@ -8,6 +8,18 @@
     {% if not entries %}
     <p>You dont have any entries yet!</p>
     {% else %}
+    <form method="GET" action="/trip/{{ trip.trip_id }}">
+      <select name="filter">
+          <option value="" {% if not filter_category %} selected {% endif %}>View All</option>
+          {% for category in categories %}
+          <option 
+            value="{{ category.category_id }}" 
+            {% if filter_category|int == category.category_id %} selected {% endif %}
+          >{{ category.name }}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="filter">
+    </form>
       <ul> 
         {% for entry in entries %}
           <li class="entry">
@@ -22,7 +34,7 @@
     {% endif %}
     <!-- <p><a href="/add-entry/{{ trip.trip_id }}">Add new Entry</a></p> -->
     <button id="createEntry">Add new Entry</button>
-                  
+
     <div id="entry-map"></div>
     <div id="entry-form-popup" class="modal">
         <!-- Modal content -->
@@ -34,14 +46,12 @@
          type="text">
                 <br>Address: 
               <input type="text" id="address" name="address" required><br>
-              <textarea name="notes">Add any notes...</textarea><br>
+              <textarea name="notes" placeholder="Add any notes..."></textarea><br>
               <select name="category">
                  <option selected disabled>Select a category</option>
-                  <option value="1">Restaurant</option>
-                  <option value="2">Bar</option>
-                  <option value="3">Accommodation</option>
-                  <option value="4">Attraction</option>
-                  <option value="5">Other</option>
+                 {% for category in categories %}
+                 <option value="{{ category.category_id }}">{{ category.name }}</option>
+                 {% endfor %}
               </select><br>
               <input type="file" id="imageinput" name="pic"><br>
               <input type="submit" id="submit_button">
@@ -70,27 +80,16 @@
         autocomplete = new google.maps.places.Autocomplete(
             /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
             {types: ['establishment']});
+        autocomplete.addListener('place_changed', fillInAddress);
 
-        // When the user selects an address from the dropdown, populate the address
-        // fields in the form.
       }
-      // $('#autocomplete').focus( geolocate);
 
-      // function geolocate() {
-      //   if (navigator.geolocation) {
-      //     navigator.geolocation.getCurrentPosition(function(position) {
-      //       var geolocation = {
-      //         lat: position.coords.latitude,
-      //         lng: position.coords.longitude
-      //       };
-      //       var circle = new google.maps.Circle({
-      //         center: geolocation,
-      //         radius: position.coords.accuracy
-      //       });
-      //       autocomplete.setBounds(circle.getBounds());
-      //     });
-      //   } 
-      // }
+      function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        var address = place.formatted_address;
+        $('#address').val(address);
+      }
 
       function codeCenterAddress(address) {
         // Set the center of the map
@@ -178,7 +177,6 @@
               modal.style.display = "none";
           }
       }
-
 
       function initialize() {
          initMap();

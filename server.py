@@ -128,10 +128,16 @@ def add_trip():
 def view_trip(trip_id):
     """Show entries for a trip"""
 
+    category_id = request.args.get('filter')
     trip = Trip.query.get(trip_id)
-    entries = Entry.query.filter_by(trip_id=trip_id).all()
+    categories = Category.query.all()
 
-    return render_template('view_trip.html', entries=entries, trip=trip)
+    if category_id:
+        entries = Entry.query.filter_by(trip_id=trip_id, type_id=category_id).all()
+    else:
+        entries = Entry.query.filter_by(trip_id=trip_id).all()
+
+    return render_template('view_trip.html', entries=entries, trip=trip, categories=categories, filter_category=category_id)
 
 
 @app.route('/add-entry/<trip_id>')
