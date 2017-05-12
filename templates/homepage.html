@@ -17,11 +17,22 @@
         {% endfor %}
       </ul>
     {% endif %}
-    <p><a href="/add-trip">Add new trip</a></p>
+    <button id="addTrip">Add New Trip</button>
+      <!-- Show modals -->
+    <div id="trip-form-popup" class="modal">
+        <div class="trip-form-content">
+          <span class="close">&times;</span>
+          <h2>New Trip</h2>
+          <form id="trip_form" action="/add-trip" method="POST">Name: 
+            <input type="text" id="name" name="name"><br>Location: 
+            <input type="text" id="location" name="location"><br>Date:
+            <input type="date" id="date" name="date"><br>
+            <input type="submit" id="submit_button">
+          </form>
+          </div>
+      </div>
     <div id="trip-map"></div>
         <script>
-
-      // var tripLocation = $( '#trip-location' ).html();
 
       function initMap() {
         geocoder = new google.maps.Geocoder();
@@ -32,8 +43,6 @@
           center: loc
         }
         map = new google.maps.Map(document.getElementById('trip-map'), mapOptions);
-  
-        // codeCenterAddress(tripLocation);
         addMarkers();
       }
 
@@ -77,6 +86,33 @@
       }
 
 
+      // Get the modal
+    var modal = document.getElementById('trip-form-popup');
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("addTrip");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[2];
+
+    // When the user clicks on the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+      }
+    }
+      
+
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&callback=initMap">
@@ -84,6 +120,5 @@
 {% else %}
     <h2>This is the homepage</h2>          
 {% endif %}
-
 
 {% endblock %}

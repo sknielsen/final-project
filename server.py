@@ -34,12 +34,6 @@ def index():
     return render_template("homepage.html", trips=user_trips)
 
 
-@app.route('/create-account', methods=['GET'])
-def create_account():
-    """ Allows user to create a new account """
-
-    return render_template('create_account.html')
-
 
 @app.route('/create-account', methods=['POST'])
 def check_create():
@@ -72,13 +66,6 @@ def logout():
     return redirect('/')
 
 
-@app.route('/login-form')
-def login():
-    """Prompts user to log in"""
-
-    return render_template('login_form.html')
-
-
 @app.route('/check-login', methods=['POST'])
 def check_login():
     """Check if email in users table"""
@@ -99,13 +86,6 @@ def check_login():
     except:
         flash("No user with that email")
         return redirect('/create-account')
-
-
-@app.route('/add-trip')
-def new_trip():
-    """Form that gets info for new trip"""
-
-    return render_template('trip_form.html')
 
 
 @app.route('/add-trip', methods=['POST'])
@@ -138,13 +118,6 @@ def view_trip(trip_id):
         entries = Entry.query.filter_by(trip_id=trip_id).all()
 
     return render_template('view_trip.html', entries=entries, trip=trip, categories=categories, filter_category=category_id)
-
-
-@app.route('/add-entry/<trip_id>')
-def new_entry(trip_id):
-    """Form that gets info for new trip"""
-
-    return render_template('entry_form.html', trip_id=trip_id)
 
 
 @app.route('/add-entry/<trip_id>', methods=['POST'])
