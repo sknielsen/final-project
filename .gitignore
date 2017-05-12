@@ -1,3 +1,5 @@
 env/
 *.pyc
 secrets.sh
+final_project.sublime-*
+.DS_Store
