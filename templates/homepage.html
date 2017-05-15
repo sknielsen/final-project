@@ -25,7 +25,7 @@
           <h2>New Trip</h2>
           <form id="trip_form" action="/add-trip" method="POST">Name: 
             <input type="text" id="name" name="name"><br>Location: 
-            <input type="text" id="location" name="location"><br>Date:
+            <input id="autocomplete" placeholder="Where are you going?" type="text"><br>Date:
             <input type="date" id="date" name="date"><br>
             <input type="submit" id="submit_button">
           </form>
@@ -44,6 +44,16 @@
         }
         map = new google.maps.Map(document.getElementById('trip-map'), mapOptions);
         addMarkers();
+      }
+
+      function initAutocomplete() {
+        // Create the autocomplete object, restricting the search to geographical
+        // location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+            {types: ['(regions)']});
+        autocomplete.addListener('place_changed', fillInAddress);
+
       }
 
       function codeMarkerAddress(address, name, contentString) {
@@ -111,12 +121,14 @@
             modal.style.display = "none";
       }
     }
-      
+    
+    function initialize() {
+      initMap();
+      initAutocomplete();
+    }
 
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&callback=initMap">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&libraries=places&callback=initialize" async defer></script>
 {% else %}
     <h2>This is the homepage</h2>          
 {% endif %}

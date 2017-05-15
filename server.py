@@ -81,11 +81,11 @@ def check_login():
             return redirect('/')
         else:
             flash('Wrong password!')
-            return redirect('/login-form')
+            return redirect('/')
 
     except:
         flash("No user with that email")
-        return redirect('/create-account')
+        return redirect('/')
 
 
 @app.route('/add-trip', methods=['POST'])
