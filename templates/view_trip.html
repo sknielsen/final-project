@@ -42,8 +42,7 @@
           <span class="close">&times;</span>
           <h2>New Entry</h2>
             <form id="entry_form" action="/add-entry/{{ trip.trip_id }}" method="POST" enctype="multipart/form-data"> 
-<input id="autocomplete" placeholder="Enter your address"
-         type="text">
+              <input id="autocomplete" placeholder="Where did you go?" type="text" name="name">
                 <br>Address: 
               <input type="text" id="address" name="address" required><br>
               <textarea name="notes" placeholder="Add any notes..."></textarea><br>

@@ -2,15 +2,51 @@
 {% block content %}
 
 <h2>{{ entry.name }}</h2>
-<h3>{{ entry.address }}</h3>
-<h3>{{ entry.notes }}</h3>
+<p id="entryId" hidden>{{ entry.entry_id }}</p>
+<p>{{ entry.address }}</p>
+<p id="notes">{{ entry.notes }}</p>
 <button id="updateNotes">Edit Notes</button>
-<h3>{{ entry.type_id }}</h3>
+<button id="submitUpdate" hidden>Submit</button>
+<h4>{{ entry.category.name }}</h4>
 <img src="/{{ entry.photo_location }}" height="300">
 <!-- <img src="/static/images/category {{ entry.type_id }}"> -->
 
 <br><a href="/trip/{{ entry.trip_id }}">Back to trip</a>
 <script>
 
-    </script>
+function btnClicked() {
+    var notesHtml = $('#notes').html();
+    var editableText = $("<textarea id=\"editNotes\"/>");
+    editableText.val(notesHtml);
+    $('#notes').replaceWith(editableText);
+    editableText.focus();
+    $('#updateNotes').hide();
+    $('#submitUpdate').show()
+
+}
+
+function editableTextBlurred() {
+    var html = $('#editNotes').val();
+    var viewableText = $("<div>");
+    viewableText.html(html);
+    $('#editNotes').replaceWith(viewableText);
+    $('#updateNotes').show();
+    $('#submitUpdate').hide()
+
+}
+
+$('#updateNotes').on("click", btnClicked);
+
+$('#submitUpdate').on("click", function() {
+    var formInputs = {
+        "notes": $("#editNotes").val(),
+        "entry": $('#entryId').html()
+    };
+
+    $.post("/update-notes", 
+           formInputs,
+           editableTextBlurred);
+});
+
+</script>
 {% endblock %}

@@ -161,6 +161,17 @@ def view_entry(trip_id, entry_id):
     return render_template('view_entry.html', entry=entry)
 
 
+@app.route('/update-notes', methods=["POST"])
+def update_notes():
+
+    notes = request.form.get("notes")
+    entry_id = request.form.get("entry")
+    entry = Entry.query.get(entry_id)
+    entry.notes = notes
+    db.session.commit()
+
+    return ""
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
