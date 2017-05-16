@@ -110,7 +110,7 @@ class Share(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Trip=%s shared with user=%s>" % (self.trip_id.trip.name, self.user_id.user.name)
+        return "<Trip=%s shared with user=%s>" % (self.trip.name, self.user.name)
 
 ##############################################################################
 # Helper functions

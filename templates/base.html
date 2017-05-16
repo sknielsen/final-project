@@ -28,7 +28,7 @@
 
   <!-- Show modals -->
     <div id="login-form-popup" class="modal">
-        <div class="login-form-content">
+        <div class="form-content">
           <span class="close">&times;</span>
             <h2>Login</h2>
             <form id="login_form" action="/check-login" method="POST">Email: 
@@ -40,7 +40,7 @@
       </div>
 
     <div id="create-form-popup" class="modal">
-        <div class="create-form-content">
+        <div class="form-content">
           <span class="close">&times;</span>
           <h2>Create Account</h2>
           <form id="new_user_form" action="/create-account" method="POST">Email: 
@@ -88,12 +88,12 @@
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
-        if (event.target == modal) {
+        if (event.target == createModal) {
             createModal.style.display = "none";
         }
     }
 
-    
+
       // Get the modal
     var modal = document.getElementById('login-form-popup');
 

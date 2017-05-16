@@ -34,11 +34,12 @@
     {% endif %}
     <!-- <p><a href="/add-entry/{{ trip.trip_id }}">Add new Entry</a></p> -->
     <button id="createEntry">Add new Entry</button>
+    <button id="shareTrip">Share Trip</button>
 
     <div id="entry-map"></div>
     <div id="entry-form-popup" class="modal">
         <!-- Modal content -->
-        <div class="entry-form-content">
+        <div class="form-content">
           <span class="close">&times;</span>
           <h2>New Entry</h2>
             <form id="entry_form" action="/add-entry/{{ trip.trip_id }}" method="POST" enctype="multipart/form-data"> 
@@ -54,6 +55,18 @@
               </select><br>
               <input type="file" id="imageinput" name="pic"><br>
               <input type="submit" id="submit_button">
+            </form>
+          </div>
+      </div>
+
+      <div id="share-form-popup" class="modal">
+        <!-- Modal content -->
+        <div class="form-content">
+          <span class="close">&times;</span>
+          <h2>Share Trip</h2>
+            <form id="share_form" action="/share-trip/{{ trip.trip_id }}" method="POST">Who would you like to share this trip with?<br>
+              <input id="shareEmail" placeholder="Email Address" type="text" name="shareEmail">
+              <input type="submit" id="share_submit_button">
             </form>
           </div>
       </div>
@@ -174,6 +187,32 @@
       window.onclick = function(event) {
           if (event.target == modal) {
               modal.style.display = "none";
+          }
+      }
+
+      // Get the modal
+      var shareModal = document.getElementById('share-form-popup');
+
+      // Get the button that opens the modal
+      var shareBtn = document.getElementById("shareTrip");
+
+      // Get the <span> element that closes the modal
+      var shareSpan = document.getElementsByClassName("close")[3];
+
+      // When the user clicks on the button, open the modal 
+      shareBtn.onclick = function() {
+          shareModal.style.display = "block";
+      }
+
+      // When the user clicks on <span> (x), close the modal
+      shareSpan.onclick = function() {
+          shareModal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+          if (event.target == shareModal) {
+              shareModal.style.display = "none";
           }
       }
 

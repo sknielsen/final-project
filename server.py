@@ -1,9 +1,10 @@
 from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash,
                    session, url_for)
-from model import User, Trip, Entry, Category, connect_to_db, db
+from model import User, Trip, Entry, Category, Share, connect_to_db, db
 import os
 from werkzeug.utils import secure_filename
+import bcrypt
 
 app = Flask(__name__)
 
@@ -28,10 +29,12 @@ def index():
     if session.get('logged_in_user'):
         user_id = session['logged_in_user']
         user_trips = Trip.query.filter_by(user_id=user_id).all()
+        shared_trips = Share.query.filter_by(viewer_id=user_id).all()
     else:
         user_trips = []
+        shared_trips= []
 
-    return render_template("homepage.html", trips=user_trips)
+    return render_template("homepage.html", trips=user_trips, shared_trips=shared_trips)
 
 
 
@@ -43,13 +46,16 @@ def check_create():
     user_password = request.form.get('password')
     name = request.form.get('name')
 
+    # Encode password
+    hashed_password = bcrypt.hashpw(user_password.encode('utf8'), bcrypt.gensalt(9))
+
     user = User.query.filter_by(email=user_email).all()
 
     if user:
         flash("User email already exists")
         return redirect('/login-form')
     else:
-        new_user = User(email=user_email, password=user_password, name=name)
+        new_user = User(email=user_email, password=hashed_password, name=name)
         db.session.add(new_user)
         db.session.commit()
         user = User.query.filter_by(email=user_email).one()
@@ -75,7 +81,7 @@ def check_login():
 
     try:
         user = User.query.filter_by(email=user_email).one()
-        if user.password == user_password:
+        if bcrypt.checkpw(user_password.encode('utf8'), user.password.encode('utf8')):
             session['logged_in_user'] = user.user_id
             flash('Hello, %s' % (user.name))
             return redirect('/')
@@ -171,6 +177,30 @@ def update_notes():
     db.session.commit()
 
     return ""
+
+
+@app.route('/share-trip/<trip_id>', methods=['POST'])
+def share_trip(trip_id):
+    """make trie viewable by another user"""
+
+    share_email = request.form.get("shareEmail")
+
+    user = User.query.filter_by(email=share_email).one()
+    if user:
+        user_id = user.user_id
+        if Share.query.filter_by(viewer_id=user_id, trip_id=trip_id).one():
+            flash("You have already shared with this user")
+            return redirect('/trip/%s' % (trip_id))
+        else:
+            share = Share(viewer_id=user_id, trip_id=trip_id)
+            db.session.add(share)
+            db.session.commit()
+            return redirect('/trip/%s' % (trip_id))
+
+    else:
+        flash("No user with that email")
+        return redirect('/trip/%s' % (trip_id))
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

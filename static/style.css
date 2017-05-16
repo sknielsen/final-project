@@ -23,7 +23,7 @@
   z-index: 2000;
 }
 /* Modal Content/Box */
-.entry-form-content, .login-form-content, .create-form-content, .trip-form-content {
+.form-content {
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
@@ -48,4 +48,8 @@
 
 #autocomplete {
     width: 80%;
+}
+
+#entryImage {
+    image-orientation: from-image;
 }

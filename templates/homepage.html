@@ -18,6 +18,17 @@
       </ul>
     {% endif %}
     <button id="addTrip">Add New Trip</button>
+    {% if shared_trips %}
+      <h3>Trips Shared With You</h3>
+      <ul>
+        {% for trip in shared_trips %}
+          <li class="shareTrip">
+          <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.trip.name }}</a></p>
+          <p class="trip-location">{{ trip.trip.location }}</p>
+          <p class="trip-owner">Owner: {{ trip.trip.user.email }}</p>
+          </li>
+        {% endfor %}
+      {% endif %}
       <!-- Show modals -->
     <div id="trip-form-popup" class="modal">
         <div class="trip-form-content">
