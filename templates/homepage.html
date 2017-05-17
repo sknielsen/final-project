@@ -2,14 +2,17 @@
 {% block content %}
 
 {% if 'logged_in_user' in session %}
-    <h2>User Profile</h2>
-    <h3>Trips</h3>
-    {% if not trips %}
+  <h2>User Profile</h2>
+  <h3>Trips</h3>
+  <button id="viewTrips" disabled>View Your Trips</button>
+  <button id="viewShared">View Shared Trips</button>
+  <div id="yourTrips">
+  {% if not trips %}
     <p>You dont have any trips yet!</p>
     {% else %}
       <ul> 
         {% for trip in trips %}
-          <li class="trip">
+          <li class="myTrip">
           <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a></p>
           <p class="trip-location">{{ trip.location }}</p>
           <p class="trip-date">{{ trip.date }}</p>
@@ -17,18 +20,23 @@
         {% endfor %}
       </ul>
     {% endif %}
-    <button id="addTrip">Add New Trip</button>
-    {% if shared_trips %}
-      <h3>Trips Shared With You</h3>
+  </div>
+  <div id="sharedTrips" hidden>
+  {% if not shared_trips %}
+    <p>No one has shared a trips with you yet!</p>
+    {% else %}
       <ul>
         {% for trip in shared_trips %}
-          <li class="shareTrip">
+          <li class="theirTrip">
           <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.trip.name }}</a></p>
           <p class="trip-location">{{ trip.trip.location }}</p>
           <p class="trip-owner">Owner: {{ trip.trip.user.email }}</p>
           </li>
         {% endfor %}
+      </ul>
       {% endif %}
+  </div>
+      <button id="addTrip">Add New Trip</button>
       <!-- Show modals -->
     <div id="trip-form-popup" class="modal">
         <div class="trip-form-content">
@@ -45,6 +53,9 @@
     <div id="trip-map"></div>
         <script>
 
+      var map;
+      var visibleMarkers = [];
+
       function initMap() {
         geocoder = new google.maps.Geocoder();
         loc = new google.maps.LatLng("30","5");
@@ -54,8 +65,8 @@
           center: loc
         }
         map = new google.maps.Map(document.getElementById('trip-map'), mapOptions);
-        addMarkers();
-      }
+        addMarkers('.myTrip');
+      } 
 
       function initAutocomplete() {
         // Create the autocomplete object, restricting the search to geographical
@@ -63,7 +74,7 @@
         autocomplete = new google.maps.places.Autocomplete(
             /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
             {types: ['(regions)']});
-        autocomplete.addListener('place_changed', fillInAddress);
+        // autocomplete.addListener('place_changed', fillInAddress);
 
       }
 
@@ -74,8 +85,10 @@
             var marker = new google.maps.Marker({
                 map: map,
                 position: results[0].geometry.location,
+                animation: google.maps.Animation.DROP,
                 title: name
             });
+            visibleMarkers.push(marker);
             var infowindow = new google.maps.InfoWindow({
             content: contentString
             });
@@ -89,22 +102,49 @@
       }
 
 
-      function addMarkers() {
-        $( ".trip" ).each(function() {
+      function addMarkers(className) {
+        $( className ).each(function() {
         var location = $(this).children(".trip-location").html();
         var name = $(this).children(".trip-link").children(".trip-name").html();
-        var date = $(this).children(".trip-date").html();
+        // var date = $(this).children(".trip-date").html();
         var link = $(this).children(".trip-link").children(".trip-name").attr("href");
         var contentString = '<div id="content">'+
             '<h1><a href=\"'+link+'\">'+name+'</a></h1>'+
             '<div id="bodyContent">'+
             '<p>'+location+'</p>'+
-            '<p>'+date+'</p>'+
             '</div>'+
             '</div>';
         codeMarkerAddress(location, name, contentString);
       });
       }
+
+      //Add event handler to trip buttons
+    $("#viewShared").on('click', function() {
+      $(this).prop('disabled', true);
+      $("#viewTrips").prop('disabled', false);
+      $("#yourTrips").attr('hidden', true);
+      $("#sharedTrips").attr('hidden', false);
+      // $('.trip').addClass('hiddenTrip').removeClass('trip');
+      // $('.hiddenTrip').addClass('trip').removeClass('hiddenTrip');
+      visibleMarkers.forEach(function(marker) {
+        marker.setMap(null);
+      });
+      addMarkers('.theirTrip');
+    });
+
+    $("#viewTrips").on('click', function() {
+      $(this).prop('disabled', true);
+      $("#viewShared").prop('disabled', false);
+      $("#yourTrips").attr('hidden', false);
+      $("#sharedTrips").attr('hidden', true);
+      // $('.hiddenTrip').addClass('trip').removeClass('hiddenTrip');
+      // $('.trip').addClass('hiddenTrip').removeClass('trip');
+      visibleMarkers.forEach(function(marker) {
+        marker.setMap(null);
+      });
+      addMarkers('.myTrip');
+    });
+
 
 
       // Get the modal
