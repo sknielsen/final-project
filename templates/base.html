@@ -2,26 +2,39 @@
 <html>
 <head>
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <!-- <link rel="stylesheet" -->
+          <!-- href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.css"/> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   <link rel="stylesheet" href="/static/style.css"/>
-  <link rel="stylesheet"
-          href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.css"/>
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
 </head>
 
 <body>
-    <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-            {% if 'logged_in_user' in session %}
-                <li><a href="/logout">Log Out</a></li>
-            {% else %}
-                <button id="login">Login</button>
-                <button id="createAccount">Create Account</button>
-            {% endif %}
-        </ul>
-        <h1><a href="/">Travels</a></h1>
+  <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="titleText">
+      <a id="navbar-brand">SOJOURNAL</a>
     </div>
+    <div class="navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="navbar-link" href="/">My Trips <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+      {% if 'logged_in_user' in session %}
+        <!-- <button id="addTrip">Add Trip</button> -->
+        <a class="navbar-link" href="/logout">Log Out</a>
+      {% else %}
+        <a class="navbar-link" id="login">Login</a>/ 
+        <a class="navbar-link" id="createAccount">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+
 
 
 
@@ -50,8 +63,21 @@
             <input type="text" id="nickname" name="name"><br>
             <input type="submit" id="submit_button">
           </form>
-          </div>
-          </div>
+        </div>
+      </div>
+<!-- 
+      <div id="trip-form-popup" class="modal">
+        <div class="form-content">
+          <span class="close">&times;</span>
+          <h2>New Trip</h2>
+          <form id="trip_form" action="/add-trip" method="POST">Name: 
+            <input type="text" id="name" name="name"><br>Location: 
+            <input id="autocomplete" name="location" placeholder="Where are you going?" type="text"><br>Date:
+            <input type="date" id="date" name="date"><br>
+            <input type="submit" id="submit_button">
+          </form>
+        </div>
+      </div> -->
 
   <!-- Show flashed messages -->
   {% with messages = get_flashed_messages() %}
@@ -68,31 +94,7 @@
 </div>
  <script>
     
-          // Get the modal
-    var createModal = document.getElementById('create-form-popup');
 
-    // Get the button that opens the modal
-    var createBtn = document.getElementById("createAccount");
-
-    // When the user clicks on the button, open the modal 
-    createBtn.onclick = function() {
-        createModal.style.display = "block";
-    }
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[1];
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        createModal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == createModal) {
-            createModal.style.display = "none";
-        }
-    }
 
 
       // Get the modal
@@ -120,6 +122,68 @@
             modal.style.display = "none";
         }
     }
+
+    // Get the modal
+    var createModal = document.getElementById('create-form-popup');
+
+    // Get the button that opens the modal
+    var createBtn = document.getElementById("createAccount");
+
+    // When the user clicks on the button, open the modal 
+    createBtn.onclick = function() {
+        createModal.style.display = "block";
+    }
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[1];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        createModal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == createModal) {
+            createModal.style.display = "none";
+        }
+    }
+
+    // Get the modal
+    // var newModal = document.getElementById('trip-form-popup');
+
+    // // Get the button that opens the modal
+    // var newBtn = document.getElementById("addTrip");
+
+    // // Get the <span> element that closes the modal
+    // var span = document.getElementsByClassName("close")[2];
+
+    // // When the user clicks on the button, open the modal 
+    // newBtn.onclick = function() {
+    //     newModal.style.display = "block";
+    // }
+
+    // // When the user clicks on <span> (x), close the modal
+    // span.onclick = function() {
+    //     newModal.style.display = "none";
+    // }
+
+    // // When the user clicks anywhere outside of the modal, close it
+    // window.onclick = function(event) {
+    //     if (event.target == newModal) {
+    //         newModal.style.display = "none";
+    //   }
+    // }
+
+    //   function initAutocomplete() {
+    //     // Create the autocomplete object, restricting the search to geographical
+    //     // location types.
+    //     autocomplete = new google.maps.places.Autocomplete(
+    //         /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+    //         {types: ['(regions)']});
+    //     // autocomplete.addListener('place_changed', fillInAddress);
+
+    //   }
 
    </script>
 </body>

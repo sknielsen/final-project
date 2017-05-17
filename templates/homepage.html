@@ -2,41 +2,39 @@
 {% block content %}
 
 {% if 'logged_in_user' in session %}
-  <h2>User Profile</h2>
-  <h3>Trips</h3>
-  <button id="viewTrips" disabled>View Your Trips</button>
-  <button id="viewShared">View Shared Trips</button>
-  <div id="yourTrips">
+<!--   <h2>User Profile</h2> -->
+<h3>Trips</h3>
+<div class="tripsTable">
+  <a class="buttonText showTripsButton" id="viewTrips" disabled>Your Trips</a>
+  <a class="buttonText showTripsButton" id="viewShared">Shared Trips</a>
+  <div class="showTrips" id="yourTrips">
   {% if not trips %}
     <p>You dont have any trips yet!</p>
     {% else %}
-      <ul> 
         {% for trip in trips %}
-          <li class="myTrip">
+          <div class="myTrip tripItem">
           <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a></p>
           <p class="trip-location">{{ trip.location }}</p>
           <p class="trip-date">{{ trip.date }}</p>
-          </li>
+          </div>
         {% endfor %}
-      </ul>
     {% endif %}
   </div>
-  <div id="sharedTrips" hidden>
+  <div class="showTrips" id="sharedTrips" hidden>
   {% if not shared_trips %}
     <p>No one has shared a trips with you yet!</p>
     {% else %}
-      <ul>
         {% for trip in shared_trips %}
-          <li class="theirTrip">
+          <div class="theirTrip tripItem">
           <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.trip.name }}</a></p>
           <p class="trip-location">{{ trip.trip.location }}</p>
           <p class="trip-owner">Owner: {{ trip.trip.user.email }}</p>
-          </li>
+          </div>
         {% endfor %}
-      </ul>
       {% endif %}
   </div>
-      <button id="addTrip">Add New Trip</button>
+</div>
+      <button class="addNewButton" id="addTrip">Add New Trip</button>
       <!-- Show modals -->
     <div id="trip-form-popup" class="modal">
         <div class="trip-form-content">
@@ -79,8 +77,10 @@
       }
 
       function codeMarkerAddress(address, name, contentString) {
+        console.log(address);
         geocoder.geocode( {address:address}, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
+            console.log(results);
             // place a marker at the location
             var marker = new google.maps.Marker({
                 map: map,
@@ -88,6 +88,7 @@
                 animation: google.maps.Animation.DROP,
                 title: name
             });
+            console.log(results[0].geometry.location);
             visibleMarkers.push(marker);
             var infowindow = new google.maps.InfoWindow({
             content: contentString
@@ -115,6 +116,7 @@
             '</div>'+
             '</div>';
         codeMarkerAddress(location, name, contentString);
+
       });
       }
 
@@ -154,7 +156,7 @@
     var btn = document.getElementById("addTrip");
 
     // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[2];
+    var span = document.getElementsByClassName("close")[0];
 
     // When the user clicks on the button, open the modal 
     btn.onclick = function() {

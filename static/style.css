@@ -1,6 +1,99 @@
 
 /* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
+body {
+    /*font-family: AvenirNext;*/
+    font-family: Sans-Serif;
+}
+
+.addNewButton {
+  width: 145px;
+  height: 36px;
+  border: 0;
+  border-radius: 100px;
+  background-color: #f33cd1;
+  font-size: 14px;
+  font-weight: 100;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.tripsTable {
+  width: 320px;
+  height: 437px;
+}
+
+.showTrips {
+  width: 320px;
+  height: 417px;
+  background-color: #f9f9f9;
+  padding: 10px;
+  overflow: auto;
+}
+
+.showTripsButton {
+  width: 123px;
+  height: 33px;
+  /*font-family: AvenirNext;*/
+  font-size: 24px;
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+#viewShared {
+    text-align: right;
+}
+
+.tripItem {
+  text-align: center;
+  width: 290px;
+  height: 112px;
+  background-color: #ffffff;
+  border: solid 1px #f2f2f2;
+}
+.buttonText {
+  width: 65px;
+  height: 19px;
+  /*font-family: AvenirNext;*/
+  font-size: 14px;
+  font-weight: 100;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.navbar {
+    background-color: #1e0253;
+}
+
+#navbar-brand {
+  width: 67px;
+  height: 27px;
+  /*font-family: AvenirNext;*/
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff;
+  padding: 40px;
+}
+.navbarPinkText {
+    width: 40%;
+}
+
+.navbar-link {
+  width: 74px;
+  height: 22px;
+  /*font-family: AvenirNext;*/
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #f659d9;
+}
+
+.navbar-collapse {
+      color: #f659d9;
+}
 #entry-map, #trip-map {
   height: 500px;
   width: 750px;
@@ -48,8 +141,4 @@
 
 #autocomplete {
     width: 80%;
-}
-
-#entryImage {
-    image-orientation: from-image;
 }
