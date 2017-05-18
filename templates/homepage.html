@@ -37,7 +37,7 @@
       <button class="addNewButton" id="addTrip">Add New Trip</button>
       <!-- Show modals -->
     <div id="trip-form-popup" class="modal">
-        <div class="trip-form-content">
+        <div class="form-content">
           <span class="close">&times;</span>
           <h2>New Trip</h2>
           <form id="trip_form" action="/add-trip" method="POST">Name: 
@@ -150,28 +150,28 @@
 
 
       // Get the modal
-    var modal = document.getElementById('trip-form-popup');
+    var tripModal = document.getElementById('trip-form-popup');
 
     // Get the button that opens the modal
-    var btn = document.getElementById("addTrip");
+    var tripBtn = document.getElementById("addTrip");
 
     // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    var tripSpan = document.getElementsByClassName("close")[2];
 
     // When the user clicks on the button, open the modal 
-    btn.onclick = function() {
-        modal.style.display = "block";
+    tripBtn.onclick = function() {
+        tripModal.style.display = "block";
     }
 
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
+    tripSpan.onclick = function() {
+        tripModal.style.display = "none";
     }
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == tripModal) {
+            tripModal.style.display = "none";
       }
     }
     
