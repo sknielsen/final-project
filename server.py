@@ -22,6 +22,20 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def has_access(trip_id):
+    """Determine wither the user that is logged in can view the trip or not"""
+
+    if not session.get('logged_in_user'):
+        return False
+    else:
+        logged_in_user_id = session['logged_in_user']
+        trip = Trip.query.get(trip_id)
+        share = Share.query.filter_by(trip_id=trip_id, viewer_id=logged_in_user_id).first()
+        if trip.user_id == logged_in_user_id or share:
+            return True
+        else:
+            return False
+
 
 @app.route('/')
 def index():
@@ -114,16 +128,20 @@ def add_trip():
 def view_trip(trip_id):
     """Show entries for a trip"""
 
-    category_id = request.args.get('filter')
-    trip = Trip.query.get(trip_id)
-    categories = Category.query.all()
-
-    if category_id:
-        entries = Entry.query.filter_by(trip_id=trip_id, type_id=category_id).all()
+    if not has_access(trip_id):
+        flash("You do not have permission to view this page")
+        return redirect('/')
     else:
-        entries = Entry.query.filter_by(trip_id=trip_id).all()
+        category_id = request.args.get('filter')
+        trip = Trip.query.get(trip_id)
+        categories = Category.query.all()
 
-    return render_template('view_trip.html', entries=entries, trip=trip, categories=categories, filter_category=category_id)
+        if category_id:
+            entries = Entry.query.filter_by(trip_id=trip_id, type_id=category_id).all()
+        else:
+            entries = Entry.query.filter_by(trip_id=trip_id).all()
+
+        return render_template('view_trip.html', entries=entries, trip=trip, categories=categories, filter_category=category_id)
 
 
 @app.route('/add-entry/<trip_id>', methods=['POST'])
@@ -162,9 +180,13 @@ def add_entry(trip_id):
 def view_entry(trip_id, entry_id):
     """Show entry details"""
 
-    entry = Entry.query.get(entry_id)
+    if not has_access(trip_id):
+        flash("You do not have permission to view this page")
+        return redirect('/')
+    else:    
+        entry = Entry.query.get(entry_id)
 
-    return render_template('view_entry.html', entry=entry)
+        return render_template('view_entry.html', entry=entry)
 
 
 @app.route('/update-notes', methods=["POST"])

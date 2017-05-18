@@ -3,7 +3,6 @@
 
 {% if 'logged_in_user' in session %}
 <!--   <h2>User Profile</h2> -->
-<h3>Trips</h3>
 <div class="tripsTable">
   <a class="buttonText showTripsButton" id="viewTrips" disabled>Your Trips</a>
   <a class="buttonText showTripsButton" id="viewShared">Shared Trips</a>
@@ -34,21 +33,22 @@
       {% endif %}
   </div>
 </div>
-      <button class="addNewButton" id="addTrip">Add New Trip</button>
+  <div id="trip-map"></div>
+  <button class="addNewButton" id="addTrip">Add New Trip</button>
       <!-- Show modals -->
-    <div id="trip-form-popup" class="modal">
-        <div class="form-content">
-          <span class="close">&times;</span>
-          <h2>New Trip</h2>
-          <form id="trip_form" action="/add-trip" method="POST">Name: 
-            <input type="text" id="name" name="name"><br>Location: 
-            <input id="autocomplete" name="location" placeholder="Where are you going?" type="text"><br>Date:
-            <input type="date" id="date" name="date"><br>
-            <input type="submit" id="submit_button">
-          </form>
-          </div>
+  <div id="trip-form-popup" class="modal">
+    <div class="form-content">
+      <span class="close">&times;</span>
+      <h2>New Trip</h2>
+      <form id="trip_form" action="/add-trip" method="POST">Name: 
+        <input type="text" id="name" name="name"><br>Location: 
+        <input id="autocomplete" name="location" placeholder="Where are you going?" type="text"><br>Date:
+        <input type="date" id="date" name="date"><br>
+        <input type="submit" id="submit_button">
+      </form>
       </div>
-    <div id="trip-map"></div>
+    </div>
+  <!-- <div id="trip-map"></div> -->
         <script>
 
       var map;

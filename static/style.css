@@ -6,6 +6,9 @@ body {
     font-family: Sans-Serif;
 }
 
+.container {
+    margin: 50px;
+}
 .addNewButton {
   width: 145px;
   height: 36px;
@@ -21,24 +24,18 @@ body {
 
 .tripsTable {
   width: 320px;
-  height: 437px;
+  height: 430px;
+  display: inline-block;
+  margin: 5px;
 }
 
 .showTrips {
-  width: 320px;
-  height: 417px;
+  width: 310px;
+  height: 410px;
   background-color: #f9f9f9;
   padding: 10px;
   overflow: auto;
-}
-
-.showTripsButton {
-  width: 123px;
-  height: 33px;
-  /*font-family: AvenirNext;*/
-  font-size: 24px;
-  font-weight: 500;
-  color: #4a4a4a;
+  margin: 0;
 }
 
 #viewShared {
@@ -51,7 +48,9 @@ body {
   height: 112px;
   background-color: #ffffff;
   border: solid 1px #f2f2f2;
+  margin: 0;
 }
+
 .buttonText {
   width: 65px;
   height: 19px;
@@ -61,6 +60,17 @@ body {
   text-align: center;
   color: #ffffff;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.showTripsButton {
+  width: 123px;
+  height: 33px;
+  /*font-family: AvenirNext;*/
+  font-size: 24px;
+  font-weight: 500;
+  color: #4a4a4a;
+  border: 5px solid #f2f2f2;
+  margin: 0;
 }
 
 .navbar {
@@ -94,9 +104,19 @@ body {
 .navbar-collapse {
       color: #f659d9;
 }
-#entry-map, #trip-map {
+
+#trip-map {
   height: 500px;
   width: 750px;
+  display: inline-block;
+  margin: 10px;
+}
+
+#entry-map {
+  height: 500px;
+  width: 750px;
+  display: inline-block;
+  margin: 10px;
 }
 
 /* The Modal (background) */
