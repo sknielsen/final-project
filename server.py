@@ -5,6 +5,7 @@ from model import User, Trip, Entry, Category, Share, connect_to_db, db
 import os
 from werkzeug.utils import secure_filename
 import bcrypt
+from helper_functions import allowed_file, has_access
 
 app = Flask(__name__)
 
@@ -16,25 +17,6 @@ app.jinja_env.undefined = StrictUndefined
 UPLOAD_FOLDER = 'static/images/'
 ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def has_access(trip_id):
-    """Determine wither the user that is logged in can view the trip or not"""
-
-    if not session.get('logged_in_user'):
-        return False
-    else:
-        logged_in_user_id = session['logged_in_user']
-        trip = Trip.query.get(trip_id)
-        share = Share.query.filter_by(trip_id=trip_id, viewer_id=logged_in_user_id).first()
-        if trip.user_id == logged_in_user_id or share:
-            return True
-        else:
-            return False
 
 
 @app.route('/')
@@ -128,7 +110,7 @@ def add_trip():
 def view_trip(trip_id):
     """Show entries for a trip"""
 
-    if not has_access(trip_id):
+    if not has_access(trip_id, session):
         flash("You do not have permission to view this page")
         return redirect('/')
     else:
