@@ -5,7 +5,7 @@ from model import User, Trip, Entry, Category, Share, connect_to_db, db
 import os
 from werkzeug.utils import secure_filename
 import bcrypt
-from helper_functions import allowed_file, has_access
+from helper_functions import allowed_file, has_access, send_registration_email, send_notification_email
 
 app = Flask(__name__)
 
@@ -188,17 +188,23 @@ def share_trip(trip_id):
     """make trie viewable by another user"""
 
     share_email = request.form.get("shareEmail")
+    user_id = session['logged_in_user']
+    sharer_name = User.query.get(user_id).name
+    trip_location =Trip.query.get(trip_id).location
+    trip_link = 'http://localhost:5000/trip/' + trip_id
 
-    user = User.query.filter_by(email=share_email).one()
+    user = User.query.filter_by(email=share_email).all()
     if user:
-        user_id = user.user_id
-        if Share.query.filter_by(viewer_id=user_id, trip_id=trip_id).one():
+        user_id = user[0].user_id
+        if Share.query.filter_by(viewer_id=user_id, trip_id=trip_id).all():
             flash("You have already shared with this user")
             return redirect('/trip/%s' % (trip_id))
         else:
             share = Share(viewer_id=user_id, trip_id=trip_id)
             db.session.add(share)
             db.session.commit()
+            flash("Trip was successfully shared")
+            send_notification_email(share_email, sharer_name, trip_location, trip_link)
             return redirect('/trip/%s' % (trip_id))
 
     else:

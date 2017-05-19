@@ -1,4 +1,8 @@
 from model import User, Trip, Share
+import sendgrid
+import os
+from sendgrid.helpers.mail import *
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -17,3 +21,29 @@ def has_access(trip_id, session):
             return True
         else:
             return False
+
+
+def send_registration_email(to_email, inviter):
+    sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+    from_email = Email("trips@sojournal.com")
+    to_email = Email(to_email)
+    subject = "Your friend has invited you to join SOJOURNAL!"
+    content = Content("text/html", "<p>" + inviter + " has invited you to join SOJOURNAL, an online travel journal to keep track of all your adventures and share them with friends!<br><br>Click <a href=\"http://localhost:5000\">here</a> to register.</p>")
+    mail = Mail(from_email, subject, to_email, content)
+    response = sg.client.mail.send.post(request_body=mail.get())
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
+
+
+def send_notification_email(to_email, sharer, location, link):
+    sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+    from_email = Email("trips@sojournal.com")
+    to_email = Email(to_email)
+    subject = "Your friend has shared their trip with you!"
+    content = Content("text/html", "<p>" + sharer + " has shared their trip to " + location + " with you!</p><br><br>Click <a href=\"" + link + "\">here</a> to see the trip.</p>")
+    mail = Mail(from_email, subject, to_email, content)
+    response = sg.client.mail.send.post(request_body=mail.get())
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
