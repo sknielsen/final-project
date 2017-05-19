@@ -3,3 +3,4 @@ env/
 secrets.sh
 final_project.sublime-*
 .DS_Store
+sendgrid.env
