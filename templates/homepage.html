@@ -78,10 +78,10 @@
       }
 
       function codeMarkerAddress(address, name, contentString) {
-        console.log(address);
+        // console.log(address);
         geocoder.geocode( {address:address}, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
-            console.log(results);
+            // console.log(results);
             // place a marker at the location
             var marker = new google.maps.Marker({
                 map: map,
@@ -89,7 +89,7 @@
                 animation: google.maps.Animation.DROP,
                 title: name
             });
-            console.log(results[0].geometry.location);
+            // console.log(results[0].geometry.location);
             visibleMarkers.push(marker);
             var infowindow = new google.maps.InfoWindow({
             content: contentString
