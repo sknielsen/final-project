@@ -28,7 +28,7 @@ def send_registration_email(to_email, inviter):
     from_email = Email("trips@sojournal.com")
     to_email = Email(to_email)
     subject = "Your friend has invited you to join SOJOURNAL!"
-    content = Content("text/html", "<p>" + inviter + " has invited you to join SOJOURNAL, an online travel journal to keep track of all your adventures and share them with friends!<br><br>Click <a href=\"http://localhost:5000\">here</a> to register.</p>")
+    content = Content("text/html", "<p>" + inviter + " has invited you to join SOJOURNAL, an online travel journal to keep track of all your adventures and share them with friends!<br><br>Click <a href=\"http://localhost:5000\">here</a> to register.</p><br><br><p>-Our Team of Sojourners</p>")
     mail = Mail(from_email, subject, to_email, content)
     response = sg.client.mail.send.post(request_body=mail.get())
     print(response.status_code)
@@ -41,7 +41,7 @@ def send_notification_email(to_email, sharer, location, link):
     from_email = Email("trips@sojournal.com")
     to_email = Email(to_email)
     subject = "Your friend has shared their trip with you!"
-    content = Content("text/html", "<p>" + sharer + " has shared their trip to " + location + " with you!</p><br><br>Click <a href=\"" + link + "\">here</a> to see the trip.</p>")
+    content = Content("text/html", "<p>" + sharer + " has shared their trip to " + location + " with you!</p><br><br>Click <a href=\"" + link + "\">here</a> to see the trip.</p><br><br><p>-Our Team of Sojourners</p>")
     mail = Mail(from_email, subject, to_email, content)
     response = sg.client.mail.send.post(request_body=mail.get())
     print(response.status_code)

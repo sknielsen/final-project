@@ -6,8 +6,10 @@
 <h4 class="inline" id="trip-location">{{ trip.location }}</h4>
 <!-- <h3>{{ trip.date }}</h3> -->
 <!-- <h3>Entries</h3> -->
-    <button class="addNewButton inline" id="createEntry">Add new Entry</button>
-    <button class="addNewButton inline" id="shareTrip">Share Trip</button>
+    {% if trip.user_id == session['logged_in_user'] %}
+      <button class="addNewButton inline" id="createEntry">Add new Entry</button>
+      <button class="addNewButton inline" id="shareTrip">Share Trip</button>
+    {% endif %}
     {% if not entries %}
     <p class="inline">You dont have any entries yet!</p>
     {% else %}
@@ -68,9 +70,13 @@
         <div class="form-content">
           <span class="close">&times;</span>
           <h2>Share Trip</h2>
-            <form id="share_form" action="/share-trip/{{ trip.trip_id }}" method="POST">Who would you like to share this trip with?<br>
+            <form id="share_form" method="POST">Who would you like to share this trip with?<br>
               <input id="shareEmail" placeholder="Email Address" type="text" name="shareEmail">
               <input type="submit" id="share_submit_button">
+            </form>
+            <form id="invite_form" action="/invite-user" method="POST" hidden>This user does not exist would you like to invite them to join SOJOURNAL?<br>
+              <input id="inviteEmail" placeholder="Email Address" type="text" name="inviteEmail">
+              <input type="submit" id="invite_submit_button">
             </form>
           </div>
       </div>
@@ -159,7 +165,7 @@
         var notes = $(this).children(".entry-notes").html();
         var link = $(this).children(".entry-link").children(".entry-name").attr("href");
         var contentString = '<div id="content">'+
-            '<span id="popupBanner"><h1 id="popupHeader">'+name+'</h1></span>'+
+            '<span id="popupBanner"><h1 id="popupHeader"><a href=\"' + link + '\">' + name + '</a></h1></span>'+
             '<img src=\"/'+photo+'\" width="300"</img>'+
             '<div id="bodyContent">'+
             '<p>'+category+'</p>'+
@@ -199,6 +205,8 @@
           }
       }
 
+
+
       // Get the modal
       var shareModal = document.getElementById('share-form-popup');
 
@@ -224,6 +232,46 @@
               shareModal.style.display = "none";
           }
       }
+
+      function flashMessage(message) {
+        $('.flash').addClass('alert');
+        $('.flash').html(message);
+        setTimeout(function() {
+          $('.flash').empty();
+          $('.flash').removeClass('alert');
+        }, 3000);
+      }
+
+      //Ajax request to share trip
+      function shareResults(result) {
+        var status = result;
+        // console.log(status.share_status);
+        if (status.share_status == "no user") {
+          $('#share_form').attr('hidden', true);
+          $('#invite_form').attr('hidden', false);
+          $('#inviteEmail').val($('#shareEmail').val());
+        } else if (status.share_status == "already shared") {
+          shareModal.style.display = "none";
+          flashMessage("You have already shared this trip with that user.")
+          // alert("You have already shared this trip with that user");
+        } else {
+          shareModal.style.display = "none";
+          flashMessage("Trip successfully shared!")
+          // alert("Trip successfully shared!");
+        }
+      }
+
+      //Ajax call
+      function shareTrip(evt) {
+        evt.preventDefault();
+        var formInputs = {
+          "email": $('#shareEmail').val()
+        };
+        $.post("/share-trip/{{ trip.trip_id }}.json", formInputs, shareResults);
+      }
+
+      //Add event handler to share form
+      $('#share_form').on('submit', shareTrip);
 
       function initialize() {
          initMap();

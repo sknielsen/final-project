@@ -1,6 +1,6 @@
 from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash,
-                   session, url_for)
+                   session, url_for, jsonify)
 from model import User, Trip, Entry, Category, Share, connect_to_db, db
 import os
 from werkzeug.utils import secure_filename
@@ -183,33 +183,42 @@ def update_notes():
     return ""
 
 
-@app.route('/share-trip/<trip_id>', methods=['POST'])
+@app.route('/share-trip/<trip_id>.json', methods=['POST'])
 def share_trip(trip_id):
     """make trie viewable by another user"""
 
-    share_email = request.form.get("shareEmail")
+    share_email = request.form.get("email")
     user_id = session['logged_in_user']
     sharer_name = User.query.get(user_id).name
-    trip_location =Trip.query.get(trip_id).location
+    trip_location = Trip.query.get(trip_id).location
     trip_link = 'http://localhost:5000/trip/' + trip_id
 
+    share_results = {}
     user = User.query.filter_by(email=share_email).all()
     if user:
         user_id = user[0].user_id
         if Share.query.filter_by(viewer_id=user_id, trip_id=trip_id).all():
-            flash("You have already shared with this user")
-            return redirect('/trip/%s' % (trip_id))
+            share_results['share_status'] = 'already shared'
+            return jsonify(share_results)
         else:
             share = Share(viewer_id=user_id, trip_id=trip_id)
             db.session.add(share)
             db.session.commit()
-            flash("Trip was successfully shared")
             send_notification_email(share_email, sharer_name, trip_location, trip_link)
-            return redirect('/trip/%s' % (trip_id))
+            share_results['share_status'] = 'success'
+            return jsonify(share_results)
 
     else:
-        flash("No user with that email")
-        return redirect('/trip/%s' % (trip_id))
+        share_results['share_status'] = 'no user'
+        return jsonify(share_results)
+
+@app.route('/invite-user', methods=['POST'])
+def invite_user():
+    user_email = request.form.get('inviteEmail')
+    user_id = session['logged_in_user']
+    inviter_name = User.query.get(user_id).name
+    send_registration_email(user_email, inviter_name)
+    return redirect('/')
 
 
 if __name__ == "__main__":
