@@ -124,7 +124,7 @@ class FlaskTestsDatabaseNoSession(unittest.TestCase):
             self.assertIn("Hello, ", result.data)
 
     def test_login_password(self):
-        """Test log in form."""
+        """Test log in form if password is incorrect"""
 
         with self.client as c:
             result = c.post('/check-login',
@@ -134,7 +134,7 @@ class FlaskTestsDatabaseNoSession(unittest.TestCase):
             self.assertIn("Wrong password!", result.data)
 
     def test_login_email(self):
-        """Test log in form."""
+        """Test log in form if email isn't in database"""
 
         with self.client as c:
             result = c.post('/check-login',
@@ -145,7 +145,7 @@ class FlaskTestsDatabaseNoSession(unittest.TestCase):
 
 
     def test_create_account_existing(self):
-        """Test create account form."""
+        """Test create account form if email already has account"""
 
         with self.client as c:
             result = c.post('/create-account',
@@ -164,6 +164,9 @@ class FlaskTestsDatabaseNoSession(unittest.TestCase):
                             )
             self.assertIn("Welcome, Three", result.data)
             self.assertEqual(session['logged_in_user'], 3)
+
+    def has_access_true(self):
+        self.assertTrue(has_access(1, {'logged_in_user': 1}))
 
 
 class FlaskTestsDatabase(unittest.TestCase):
@@ -195,18 +198,35 @@ class FlaskTestsDatabase(unittest.TestCase):
         db.drop_all()
 
     def test_homepage_logged_in(self):
-        """Test departments page."""
+        """Test homepage if user logged in."""
 
         result = self.client.get("/", follow_redirects=True)
         self.assertNotIn(">Login>/a>", result.data)
         self.assertIn("Your Trips", result.data)
 
-    # def test_departments_details(self):
-    #     """Test departments page."""
+    def test_trips_page(self):
+        """Test trip view page."""
 
-    #     result = self.client.get("/department/fin")
-    #     self.assertIn("Phone: 555-1000", result.data)
+        result = self.client.get("/trip/1", follow_redirects=True)
+        self.assertIn("Abroad Trip", result.data)
 
+    def test_add_trip(self):
+        """Test add trip route."""
+
+        with self.client as c:
+            result = c.post('/add-trip',
+                            data={'name': 'Mothers Day', 'location': 'Italy', 'date': '04/28/2018'},
+                            follow_redirects=True
+                            )
+        self.assertIn("Mothers Day", result.data)
+        self.assertIn("My Trips", result.data)
+
+    def test_view_entry(self):
+        """Test add trip route."""
+
+        result = self.client.get("/trip/1/1", follow_redirects=True)
+                            
+        self.assertIn("Tibidabo", result.data)
 
 if __name__ == "__main__":
 
