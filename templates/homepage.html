@@ -4,8 +4,10 @@
 {% if 'logged_in_user' in session %}
 <!--   <h2>User Profile</h2> -->
 <div class="tripsTable">
-  <a class="buttonText showTripsButton" id="viewTrips" disabled>Your Trips</a>
-  <a class="buttonText showTripsButton" id="viewShared">Shared Trips</a>
+  <ul class="nav nav-tabs">
+    <li class="buttonText showTripsButton" id="viewTrips" disabled>Your Trips</li>
+    <li class="buttonText showTripsButton" id="viewShared">Shared Trips</li>
+  </ul>
   <div class="showTrips" id="yourTrips">
   {% if not trips %}
     <p>You dont have any trips yet!</p>
