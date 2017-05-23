@@ -116,11 +116,34 @@ class Share(db.Model):
 # Helper functions
 
 
-def connect_to_db(app):
+def example_data():
+    """Create some sample data."""
+
+    # In case this is run more than once, empty out existing data
+    User.query.delete()
+    Trip.query.delete()
+    Entry.query.delete()
+    Category.query.delete()
+    Share.query.delete()
+
+    # Add sample data
+    user1 = User(email='user1@gmail.com', password='user1', name='One')
+    user2 = User(email='user2@gmail.com', password='user2', name='Two')
+    trip1 = Trip(location='Spain', date='08/09/2017', name='Abroad Trip', user_id=1)
+    entry1 = Entry(trip_id=1, name='Tibidabo', address='08035 Barcelona, Spain', notes='Fun day trip!',
+                   type_id=1)
+    category1 = Category(name='Attraction')
+    share1 = Share(viewer_id=2, trip_id=1)
+
+    db.session.add_all([user1, user2, trip1, entry1, category1, share1])
+    db.session.commit()
+
+
+def connect_to_db(app, db_uri='postgresql:///travels'):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///travels'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)

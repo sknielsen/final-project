@@ -5,18 +5,17 @@ from model import User, Trip, Entry, Category, Share, connect_to_db, db
 import os
 from werkzeug.utils import secure_filename
 import bcrypt
-from helper_functions import allowed_file, has_access, send_registration_email, send_notification_email
+from helper_functions import allowed_file, has_access, send_registration_email, send_notification_email, ALLOWED_EXTENSIONS
 
 app = Flask(__name__)
 
 # Required to use Flask sessions
 # app.secret_key = os.environ['SECRET_KEY']
 app.secret_key = 'abcde'
-
 app.jinja_env.undefined = StrictUndefined
 UPLOAD_FOLDER = 'static/images/'
-ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 @app.route('/')
@@ -141,7 +140,6 @@ def add_entry(trip_id):
 
     db.session.add(entry)
     db.session.commit()
-    # print entry.name
     if 'pic' in request.files:
         file = request.files['pic']
         if file and allowed_file(file.filename):
@@ -162,7 +160,7 @@ def add_entry(trip_id):
 def view_entry(trip_id, entry_id):
     """Show entry details"""
 
-    if not has_access(trip_id):
+    if not has_access(trip_id, session):
         flash("You do not have permission to view this page")
         return redirect('/')
     else:    
@@ -211,6 +209,7 @@ def share_trip(trip_id):
     else:
         share_results['share_status'] = 'no user'
         return jsonify(share_results)
+
 
 @app.route('/invite-user', methods=['POST'])
 def invite_user():

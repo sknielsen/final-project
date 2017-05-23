@@ -3,10 +3,13 @@ import sendgrid
 import os
 from sendgrid.helpers.mail import *
 
+ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def has_access(trip_id, session):
     """Determine wither the user that is logged in can view the trip or not"""

@@ -7,10 +7,10 @@ def load_categories():
     """Load categories from category.txt into database."""
 
     # Delete all rows in table, so if we need to run this a second time,
-    # we won't be trying to add duplicate users
+    # we won't be trying to add duplicate categories
     Category.query.delete()
 
-    # Read u.user file and insert data
+    # Read file and insert data
     for row in open("categories.txt"):
         row = row.rstrip()
         name = row

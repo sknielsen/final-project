@@ -2,10 +2,8 @@
 {% block content %}
 
 <div id="tripBanner">
-<h3 class="inline">{{ trip.name }}, </h3>
-<h4 class="inline" id="trip-location">{{ trip.location }}</h4>
-<!-- <h3>{{ trip.date }}</h3> -->
-<!-- <h3>Entries</h3> -->
+  <h3 class="inline">{{ trip.name }}, </h3>
+  <h4 class="inline" id="trip-location">{{ trip.location }}</h4>
     {% if trip.user_id == session['logged_in_user'] %}
       <button class="addNewButton inline" id="createEntry">Add new Entry</button>
       <button class="addNewButton inline" id="shareTrip">Share Trip</button>
