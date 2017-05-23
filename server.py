@@ -48,7 +48,7 @@ def check_create():
 
     if user:
         flash("User email already exists")
-        return redirect('/login-form')
+        return redirect('/')
     else:
         new_user = User(email=user_email, password=hashed_password, name=name)
         db.session.add(new_user)

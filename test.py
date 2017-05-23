@@ -1,5 +1,5 @@
 import unittest
-# from model import connect_to_db, db, example_data
+from model import connect_to_db, db, example_data
 from server import app
 from flask import session
 from helper_functions import allowed_file, has_access, send_registration_email, send_notification_email, ALLOWED_EXTENSIONS
@@ -89,50 +89,125 @@ class FlaskTestsLogInLogOut(unittest.TestCase):
             self.assertIn('logged out', result.data)
 
 
-# class FlaskTestsDatabase(TestCase):
-#     """Flask tests that use the database."""
+class FlaskTestsDatabaseNoSession(unittest.TestCase):
+    """Flask tests that use the database and no session."""
 
-#     def setUp(self):
-#         """Stuff to do before every test."""
+    def setUp(self):
+        """Stuff to do before every test."""
 
-#         # Get the Flask test client
-#         self.client = app.test_client()
-#         app.config['TESTING'] = True
+        # Get the Flask test client
+        self.client = app.test_client()
+        app.config['TESTING'] = True
 
-#         # Connect to test database
-#         connect_to_db(app, "postgresql:///testdb")
+        # Connect to test database
+        connect_to_db(app, "postgresql:///testdb")
 
-#         # Create tables and add sample data
-#         db.create_all()
-#         example_data()
+        # Create tables and add sample data
+        db.create_all()
+        example_data()
 
-#     def tearDown(self):
-#         """Do at end of every test."""
+    def tearDown(self):
+        """Do at end of every test."""
 
-#         db.session.close()
-#         db.drop_all()
+        db.session.close()
+        db.drop_all()
 
-#     def test_departments_list(self):
-#         """Test departments page."""
+    def test_login_correct(self):
+        """Test log in form."""
 
-#         result = self.client.get("/departments")
-#         self.assertIn("Legal", result.data)
+        with self.client as c:
+            result = c.post('/check-login',
+                            data={'email': 'user1@gmail.com', 'password': 'user1'},
+                            follow_redirects=True
+                            )
+            self.assertEqual(session['logged_in_user'], 1)
+            self.assertIn("Hello, ", result.data)
 
-#     def test_departments_details(self):
-#         """Test departments page."""
+    def test_login_password(self):
+        """Test log in form."""
 
-#         result = self.client.get("/department/fin")
-#         self.assertIn("Phone: 555-1000", result.data)
+        with self.client as c:
+            result = c.post('/check-login',
+                            data={'email': 'user1@gmail.com', 'password': 'user2'},
+                            follow_redirects=True
+                            )
+            self.assertIn("Wrong password!", result.data)
 
-#     def test_login(self):
-#         """Test login page."""
+    def test_login_email(self):
+        """Test log in form."""
 
-#         result = self.client.post("/login",
-#                                   data={"user_id": "rachel", "password": "123"},
-#                                   follow_redirects=True)
-#         self.assertIn("You are a valued user", result.data)
+        with self.client as c:
+            result = c.post('/check-login',
+                            data={'email': 'user3@gmail.com', 'password': 'user1'},
+                            follow_redirects=True
+                            )
+            self.assertIn("No user with that email", result.data)
 
-        
+
+    def test_create_account_existing(self):
+        """Test create account form."""
+
+        with self.client as c:
+            result = c.post('/create-account',
+                            data={'email': 'user1@gmail.com', 'password': 'user1', 'name': 'One'},
+                            follow_redirects=True
+                            )
+            self.assertIn("User email already exists", result.data)
+
+    def test_create_account_nonexisting(self):
+        """Test create account form."""
+
+        with self.client as c:
+            result = c.post('/create-account',
+                            data={'email': 'user3@gmail.com', 'password': 'user3', 'name': 'Three'},
+                            follow_redirects=True
+                            )
+            self.assertIn("Welcome, Three", result.data)
+            self.assertEqual(session['logged_in_user'], 3)
+
+
+class FlaskTestsDatabase(unittest.TestCase):
+    """Flask tests that use the database."""
+
+    def setUp(self):
+        """Stuff to do before every test."""
+
+        # Get the Flask test client
+        self.client = app.test_client()
+        app.config['SECRET_KEY'] = 'key'
+        app.config['TESTING'] = True
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['logged_in_user'] = 1
+
+        # Connect to test database
+        connect_to_db(app, "postgresql:///testdb")
+
+        # Create tables and add sample data
+        db.create_all()
+        example_data()
+
+    def tearDown(self):
+        """Do at end of every test."""
+
+        db.session.close()
+        db.drop_all()
+
+    def test_homepage_logged_in(self):
+        """Test departments page."""
+
+        result = self.client.get("/", follow_redirects=True)
+        self.assertNotIn(">Login>/a>", result.data)
+        self.assertIn("Your Trips", result.data)
+
+    # def test_departments_details(self):
+    #     """Test departments page."""
+
+    #     result = self.client.get("/department/fin")
+    #     self.assertIn("Phone: 555-1000", result.data)
+
+
 if __name__ == "__main__":
 
     unittest.main()
