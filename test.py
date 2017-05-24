@@ -1,5 +1,5 @@
 import unittest
-from model import connect_to_db, db, example_data
+from model import connect_to_db, db, example_data, User
 from server import app
 from flask import session
 from helper_functions import allowed_file, has_access, send_registration_email, send_notification_email, ALLOWED_EXTENSIONS
@@ -120,6 +120,7 @@ class FlaskTestsDatabaseNoSession(unittest.TestCase):
                             data={'email': 'user1@gmail.com', 'password': 'user1'},
                             follow_redirects=True
                             )
+            # print session.get('logged_in_user')
             self.assertEqual(session['logged_in_user'], 1)
             self.assertIn("Hello, ", result.data)
 
@@ -165,7 +166,7 @@ class FlaskTestsDatabaseNoSession(unittest.TestCase):
             self.assertIn("Welcome, Three", result.data)
             self.assertEqual(session['logged_in_user'], 3)
 
-    def has_access_true(self):
+    def test_has_access_true(self):
         self.assertTrue(has_access(1, {'logged_in_user': 1}))
 
 

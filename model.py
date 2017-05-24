@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+import bcrypt
 
 db = SQLAlchemy()
 
@@ -127,8 +128,8 @@ def example_data():
     Share.query.delete()
 
     # Add sample data
-    user1 = User(email='user1@gmail.com', password='user1', name='One')
-    user2 = User(email='user2@gmail.com', password='user2', name='Two')
+    user1 = User(email='user1@gmail.com', password=bcrypt.hashpw('user1'.encode('utf8'), bcrypt.gensalt(9)), name='One')
+    user2 = User(email='user2@gmail.com', password=bcrypt.hashpw('user2'.encode('utf8'), bcrypt.gensalt(9)), name='Two')
     trip1 = Trip(location='Spain', date='08/09/2017', name='Abroad Trip', user_id=1)
     entry1 = Entry(trip_id=1, name='Tibidabo', address='08035 Barcelona, Spain', notes='Fun day trip!',
                    type_id=1)
