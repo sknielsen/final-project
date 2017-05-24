@@ -35,9 +35,9 @@
       {% endif %}
   </div>
     <button class="addNewButton" id="addTrip">Add New Trip</button>
+    <button class="addNewButton" id="requestFriend">Request Friend</button>
 </div>
   <div id="trip-map"></div>
-<!--   <button class="addNewButton" id="addTrip">Add New Trip</button> -->
       <!-- Show modals -->
   <div id="trip-form-popup" class="modal">
     <div class="form-content">
@@ -51,7 +51,21 @@
       </form>
       </div>
     </div>
-  <!-- <div id="trip-map"></div> -->
+    <!-- Show modals -->
+  <div id="friend-form-popup" class="modal">
+    <div class="form-content">
+      <span class="close">&times;</span>
+      <h2>Request Friend</h2>
+        <form id="request_form" method="POST">Who would you like to become friends with?<br>
+          <input id="friendEmail" placeholder="Email Address" type="text" name="requestEmail">
+          <input type="submit" id="request_submit_button">
+        </form>
+        <form id="invite_friend_form" action="/invite-user" method="POST" hidden>This user does not exist would you like to invite them to join SOJOURNAL?<br>
+              <input id="inviteFriendEmail" placeholder="Email Address" type="text" name="inviteEmail">
+              <input type="submit" id="invite_friend_submit_button">
+        </form>
+      </div>
+    </div>
         <script>
 
       var map;
@@ -150,8 +164,6 @@
       addMarkers('.myTrip');
     });
 
-
-
       // Get the modal
     var tripModal = document.getElementById('trip-form-popup');
 
@@ -177,7 +189,75 @@
             tripModal.style.display = "none";
       }
     }
+
+          // Get the modal
+    var friendModal = document.getElementById('friend-form-popup');
+
+    // Get the button that opens the modal
+    var friendBtn = document.getElementById("requestFriend");
+
+    // Get the <span> element that closes the modal
+    var friendSpan = document.getElementsByClassName("close")[3];
+
+    // When the user clicks on the button, open the modal 
+    friendBtn.onclick = function() {
+        friendModal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    friendSpan.onclick = function() {
+        friendModal.style.display = "none";
+        $('#request_form').attr('hidden', false);
+        $('#invite_friend_form').attr('hidden', true);
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == friendModal) {
+            friendModal.style.display = "none";
+            $('#request_form').attr('hidden', false);
+            $('#invite_friend_form').attr('hidden', true);
+      }
+    }
+
+      function flashMessage(message) {
+        $('.flash').addClass('alert');
+        $('.flash').html(message);
+        setTimeout(function() {
+          $('.flash').empty();
+          $('.flash').removeClass('alert');
+        }, 3000);
+      }
+
+      //Ajax request to share trip
+      function friendRequested(result) {
+        var status = result;
+        // console.log(status.share_status);
+        if (status.request_status == "no user") {
+          $('#request_form').attr('hidden', true);
+          $('#invite_friend_form').attr('hidden', false);
+          $('#requestEmail').val($('#inviteFriendEmail').val());
+        } else if (status.request_status == "already friends") {
+          friendModal.style.display = "none";
+          flashMessage("You are already friends with that user!")
+        } else {
+          friendModal.style.display = "none";
+          flashMessage("Friend request sent!")
+        }
+      }
+
+      //Ajax call
+      function requestFriend(evt) {
+        evt.preventDefault();
+        var formInputs = {
+          "email": $('#friendEmail').val()
+        };
+        $.post("/request-friend.json", formInputs, friendRequested);
+      }
     
+      //Add event handler to share form
+      $('#request_form').on('submit', requestFriend);
+
     function initialize() {
       initMap();
       initAutocomplete();

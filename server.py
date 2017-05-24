@@ -1,7 +1,7 @@
 from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash,
                    session, url_for, jsonify)
-from model import User, Trip, Entry, Category, Share, connect_to_db, db
+from model import User, Trip, Entry, Category, Share, connect_to_db, db, Friend
 import os
 from werkzeug.utils import secure_filename
 import bcrypt
@@ -210,9 +210,37 @@ def share_trip(trip_id):
         share_results['share_status'] = 'no user'
         return jsonify(share_results)
 
+@app.route('/request-friend.json', methods=['POST'])
+def request_friend():
+    """initiate friend request"""
+
+    friend_email = request.form.get("email")
+    user_id = session['logged_in_user']
+    user = User.query.get(user_id)
+
+    request_results = {}
+    friend = User.query.filter_by(email=friend_email).all()
+    if friend:
+        if friend in user.all_friends:
+            request_results['request_status'] = 'already friends'
+            return jsonify(request_results)
+        else:
+            friend_id = friend[0].user_id
+            friend = Friend(requester_id=user_id, accepter_id=friend_id)
+            db.session.add(friend)
+            db.session.commit()
+            # send_notification_email(share_email, sharer_name, trip_location, trip_link)
+            request_results['request_status'] = 'success'
+            return jsonify(request_results)
+
+    else:
+        request_results['request_status'] = 'no user'
+        return jsonify(request_results)
 
 @app.route('/invite-user', methods=['POST'])
 def invite_user():
+    """Invite new user to join with an email"""
+
     user_email = request.form.get('inviteEmail')
     user_id = session['logged_in_user']
     inviter_name = User.query.get(user_id).name
