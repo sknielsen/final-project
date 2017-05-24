@@ -113,6 +113,32 @@ class Share(db.Model):
 
         return "<Trip=%s shared with user=%s>" % (self.trip.name, self.user.name)
 
+
+class Friend(db.Model):
+    """Create relationship between two users"""
+
+    __tablename__ = "friends"
+
+    friend_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    requester_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    accepter_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    accepted = db.Column(db.Boolean, nullable=True)
+
+    # Define relationship to user
+    requester = db.relationship("User", foreign_keys="Friend.requester_id",
+                                        backref=db.backref("requested_friends",
+                                        order_by=friend_id))
+
+    # Define relationship to user
+    accepter = db.relationship("User", foreign_keys="Friend.accepter_id",
+                                       backref=db.backref("accepted_friends",
+                                       order_by=friend_id))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<%s requested to be friends with %s and the status is %s>" % (self.requester.name, self.accepter.name, self.accepted)
+
 ##############################################################################
 # Helper functions
 
