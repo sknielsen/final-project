@@ -139,6 +139,27 @@ class Friend(db.Model):
 
         return "<%s requested to be friends with %s and the status is %s>" % (self.requester.name, self.accepter.name, self.accepted)
 
+
+# this relationship is viewonly and selects across the union of all friends
+friendship_union = db.select([
+                    Friend.requester_id,
+                    Friend.accepter_id
+                    ]).where(Friend.accepted==True).union(
+                        db.select([
+                            Friend.accepter_id,
+                            Friend.requester_id]
+                        ).where(Friend.accepted==True)
+                    ).alias()
+
+
+User.all_friends = db.relationship('User',
+                       secondary=friendship_union,
+                       primaryjoin=User.user_id==friendship_union.c.requester_id,
+                       secondaryjoin=User.user_id==friendship_union.c.accepter_id,
+                       viewonly=True)
+
+
+
 ##############################################################################
 # Helper functions
 
