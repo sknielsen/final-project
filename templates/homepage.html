@@ -5,8 +5,8 @@
 <!--   <h2>User Profile</h2> -->
 <div class="tripsTable">
   <ul class="nav nav-tabs">
-    <li class="buttonText showTripsButton" id="viewTrips" disabled>Your Trips</li>
-    <li class="buttonText showTripsButton" id="viewShared">Shared Trips</li>
+    <li class="active buttonText showTripsButton" id="viewTrips"><a data-toggle="tab" href="#yourTrips">Your Trips</a></li>
+    <li class="buttonText showTripsButton" id="viewShared"><a data-toggle="tab" href="#sharedTrips">Shared Trips</a></li>
   </ul>
   <div class="showTrips" id="yourTrips">
   {% if not trips %}
@@ -89,8 +89,6 @@
         autocomplete = new google.maps.places.Autocomplete(
             /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
             {types: ['(regions)']});
-        // autocomplete.addListener('place_changed', fillInAddress);
-
       }
 
       function codeMarkerAddress(address, name, contentString) {
@@ -139,12 +137,8 @@
 
       //Add event handler to trip buttons
     $("#viewShared").on('click', function() {
-      $(this).prop('disabled', true);
-      $("#viewTrips").prop('disabled', false);
       $("#yourTrips").attr('hidden', true);
       $("#sharedTrips").attr('hidden', false);
-      // $('.trip').addClass('hiddenTrip').removeClass('trip');
-      // $('.hiddenTrip').addClass('trip').removeClass('hiddenTrip');
       visibleMarkers.forEach(function(marker) {
         marker.setMap(null);
       });
@@ -152,12 +146,8 @@
     });
 
     $("#viewTrips").on('click', function() {
-      $(this).prop('disabled', true);
-      $("#viewShared").prop('disabled', false);
       $("#yourTrips").attr('hidden', false);
       $("#sharedTrips").attr('hidden', true);
-      // $('.hiddenTrip').addClass('trip').removeClass('hiddenTrip');
-      // $('.trip').addClass('hiddenTrip').removeClass('trip');
       visibleMarkers.forEach(function(marker) {
         marker.setMap(null);
       });
@@ -171,7 +161,7 @@
     var tripBtn = document.getElementById("addTrip");
 
     // Get the <span> element that closes the modal
-    var tripSpan = document.getElementsByClassName("close")[2];
+    var tripSpan = document.getElementsByClassName("close")[3];
 
     // When the user clicks on the button, open the modal 
     tripBtn.onclick = function() {
@@ -197,7 +187,7 @@
     var friendBtn = document.getElementById("requestFriend");
 
     // Get the <span> element that closes the modal
-    var friendSpan = document.getElementsByClassName("close")[3];
+    var friendSpan = document.getElementsByClassName("close")[4];
 
     // When the user clicks on the button, open the modal 
     friendBtn.onclick = function() {

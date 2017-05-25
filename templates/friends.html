@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    <h2>Friends</h2>
+    <ul>Friend Requests
+    {% if not friend_requests %}
+      <p>You dont have any outstanding friend requests!</p>
+    {% else %}
+      {% for friend in friend_requests %}
+      <li>{{ friend.requester.name }}<div class="accepted-action" name="{{ friend.friend_id }}"><button name="{{ friend.friend_id }}" class="accepted-friend">Accept</button><button name="{{ friend.friend_id }}" class="denied-friend">Deny</button></div></li>
+      {% endfor %}
+    {% endif %}
+  </ul>
+    <ul>Your Friends
+    {% if not friends %}
+      <p>You dont have any friends yet!</p>
+    {% else %}
+      {% for friend in friends %}
+        <li>{{ friend.name }}</li>
+      {% endfor %}
+    {% endif %}
+    </ul>
+  </div>
+
+  <script>
+
+    //Ajax request to accept friend
+    function friendAccepted(result) {
+      var status = result['request_id'];
+      console.log(status);
+      $("button[name=status]").remove();
+      $("div[name=status]").html('Accepted!');
+      // if (status.request_status == "no user") {
+      //   $('#request_form').attr('hidden', true);
+      //   $('#invite_friend_form').attr('hidden', false);
+      //   $('#requestEmail').val($('#inviteFriendEmail').val());
+      // } else if (status.request_status == "already friends") {
+      //   friendModal.style.display = "none";
+      //   flashMessage("You are already friends with that user!")
+      // } else {
+      //   friendModal.style.display = "none";
+      //   flashMessage("Friend request sent!")
+      // }
+    }
+
+    //Ajax call
+    function requestResponse() {
+      var formInputs = {
+        "response": this.getAttribute("name")
+      };
+      $.post("/accept-friend.json", formInputs, friendAccepted);
+    }
+
+  // Add event handler to all friend request accept buttons
+  $('.accepted-friend').on('click', requestResponse)
+
+
+
+  </script>
+{% endblock %}

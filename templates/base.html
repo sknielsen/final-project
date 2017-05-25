@@ -2,8 +2,6 @@
 <html>
 <head>
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-  <!-- <link rel="stylesheet" -->
-          <!-- href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.css"/> -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   <link rel="stylesheet" href="/static/style.css"/>
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -22,20 +20,20 @@
     <div class="navbar-collapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
+        {% if 'logged_in_user' in session %}
           <a class="navbar-link" href="/">My Trips <span class="sr-only">(current)</span></a>
+          <a class="navbar-link" href="/friends" id="friendsLink">Friends</a>
         </li>
       </ul>
-      {% if 'logged_in_user' in session %}
-        <!-- <button id="addTrip">Add Trip</button> -->
         <a class="navbar-link" href="/logout">Log Out</a>
       {% else %}
-        <a class="navbar-link" id="login">Login</a>/ 
+        </li>
+        </ul>
+        <a class="navbar-link" id="login" href="#login">Login</a>/ 
         <a class="navbar-link" id="createAccount">Register</a>
       {% endif %}
     </div>
   </nav>
-
-
 
 
 <div class="container">
@@ -59,25 +57,13 @@
           <h2>Create Account</h2>
           <form id="new_user_form" action="/create-account" method="POST">Email: 
             <input type="email" id="email" name="email" default="email" required><br>Password: 
-            <input type="password" id="password" name="password" default="password" required><br>Nickname:
+            <input type="password" id="password" name="password" default="password" required><br>Username:
             <input type="text" id="nickname" name="name"><br>
             <input type="submit" id="submit_button">
           </form>
         </div>
       </div>
-<!-- 
-      <div id="trip-form-popup" class="modal">
-        <div class="form-content">
-          <span class="close">&times;</span>
-          <h2>New Trip</h2>
-          <form id="trip_form" action="/add-trip" method="POST">Name: 
-            <input type="text" id="name" name="name"><br>Location: 
-            <input id="autocomplete" name="location" placeholder="Where are you going?" type="text"><br>Date:
-            <input type="date" id="date" name="date"><br>
-            <input type="submit" id="submit_button">
-          </form>
-        </div>
-      </div> -->
+
 
   <!-- Show flashed messages -->
   {% with messages = get_flashed_messages() %}
@@ -97,8 +83,7 @@
     
 
 
-
-      // Get the modal
+    // Get the modal to login
     var modal = document.getElementById('login-form-popup');
 
     // Get the button that opens the modal
@@ -124,7 +109,7 @@
         }
     }
 
-    // Get the modal
+    // Get the modal register
     var createModal = document.getElementById('create-form-popup');
 
     // Get the button that opens the modal
@@ -150,41 +135,6 @@
         }
     }
 
-    // Get the modal
-    // var newModal = document.getElementById('trip-form-popup');
-
-    // // Get the button that opens the modal
-    // var newBtn = document.getElementById("addTrip");
-
-    // // Get the <span> element that closes the modal
-    // var span = document.getElementsByClassName("close")[2];
-
-    // // When the user clicks on the button, open the modal 
-    // newBtn.onclick = function() {
-    //     newModal.style.display = "block";
-    // }
-
-    // // When the user clicks on <span> (x), close the modal
-    // span.onclick = function() {
-    //     newModal.style.display = "none";
-    // }
-
-    // // When the user clicks anywhere outside of the modal, close it
-    // window.onclick = function(event) {
-    //     if (event.target == newModal) {
-    //         newModal.style.display = "none";
-    //   }
-    // }
-
-    //   function initAutocomplete() {
-    //     // Create the autocomplete object, restricting the search to geographical
-    //     // location types.
-    //     autocomplete = new google.maps.places.Autocomplete(
-    //         /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
-    //         {types: ['(regions)']});
-    //     // autocomplete.addListener('place_changed', fillInAddress);
-
-    //   }
 
    </script>
 </body>

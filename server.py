@@ -229,7 +229,6 @@ def request_friend():
             friend = Friend(requester_id=user_id, accepter_id=friend_id)
             db.session.add(friend)
             db.session.commit()
-            # send_notification_email(share_email, sharer_name, trip_location, trip_link)
             request_results['request_status'] = 'success'
             return jsonify(request_results)
 
@@ -246,6 +245,32 @@ def invite_user():
     inviter_name = User.query.get(user_id).name
     send_registration_email(user_email, inviter_name)
     return redirect('/')
+
+
+@app.route('/friends')
+def show_friends():
+    """Show friends and friend requests"""
+
+    user_id = session['logged_in_user']
+    user = User.query.get(user_id)
+    friends = user.all_friends
+    friend_requests = user.requested_friends
+    friend_requests = [request for request in friend_requests if not request.accepted]
+
+    return render_template('friends.html', friends=friends, friend_requests=friend_requests)
+
+
+@app.route('/accept-friend.json', methods=['POST'])
+def accept_friend():
+    """Accept users friend request"""
+
+    friend_id = request.form.get("response")
+    friend = Friend.query.get(friend_id)
+    friend.accepted = True
+    db.session.commit()
+
+    response = {'request_id': friend_id}
+    return jsonify(response)
 
 
 if __name__ == "__main__":
