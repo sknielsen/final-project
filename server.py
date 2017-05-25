@@ -273,6 +273,19 @@ def accept_friend():
     return jsonify(response)
 
 
+@app.route('/deny-friend.json', methods=['POST'])
+def deny_friend():
+    """Accept users friend request"""
+
+    friend_id = request.form.get("response")
+    friend = Friend.query.get(friend_id)
+    friend.accepted = False
+    db.session.commit()
+
+    response = {'request_id': friend_id}
+    return jsonify(response)
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
