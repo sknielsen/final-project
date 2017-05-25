@@ -24,13 +24,20 @@ def index():
     if session.get('logged_in_user'):
         user_id = session['logged_in_user']
         user_trips = Trip.query.filter_by(user_id=user_id).all()
-        shared_trips = Share.query.filter_by(viewer_id=user_id).all()
+        friends = User.query.get(user_id).all_friends
+        friend_ids = [friend.user_id for friend in friends]
+        friends_trips = Trip.query.filter(Trip.user_id.in_(friend_ids)).all()
+        shared_trips = set([])
+        for trip in friends_trips:
+            for share in trip.shares:
+                if share.viewer_id == user_id:
+                    shared_trips.add(trip.trip_id)
     else:
         user_trips = []
-        shared_trips= []
+        friends_trips = []
+        shared_trips = []
 
-    return render_template("homepage.html", trips=user_trips, shared_trips=shared_trips)
-
+    return render_template("homepage.html", trips=user_trips, friends_trips=friends_trips, shared_trips=shared_trips)
 
 
 @app.route('/create-account', methods=['POST'])

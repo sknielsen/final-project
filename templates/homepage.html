@@ -6,7 +6,7 @@
 <div class="tripsTable">
   <ul class="nav nav-tabs">
     <li class="active buttonText showTripsButton" id="viewTrips"><a data-toggle="tab" href="#yourTrips">Your Trips</a></li>
-    <li class="buttonText showTripsButton" id="viewShared"><a data-toggle="tab" href="#sharedTrips">Shared Trips</a></li>
+    <li class="buttonText showTripsButton" id="viewShared"><a data-toggle="tab" href="#sharedTrips">Friends Trips</a></li>
   </ul>
   <div class="showTrips" id="yourTrips">
   {% if not trips %}
@@ -22,14 +22,14 @@
     {% endif %}
   </div>
   <div class="showTrips" id="sharedTrips" hidden>
-  {% if not shared_trips %}
-    <p>No one has shared a trips with you yet!</p>
+  {% if not friends_trips %}
+    <p>No friends trips to see!</p>
     {% else %}
-        {% for trip in shared_trips %}
+        {% for trip in friends_trips %}
           <div class="theirTrip tripItem">
-          <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.trip.name }}</a></p>
-          <p class="trip-location">{{ trip.trip.location }}</p>
-          <p class="trip-owner">Owner: {{ trip.trip.user.email }}</p>
+          <p class="trip-link">{% if trip.trip_id in shared_trips %}<a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a>{% else %}<span class="trip-name">{{ trip.name }}</span>{% endif %}</p>
+          <p class="trip-location">{{ trip.location }}</p>
+          <p class="trip-owner">Owner: {{ trip.user.email }}</p>
           </div>
         {% endfor %}
       {% endif %}
@@ -222,7 +222,6 @@
       //Ajax request to share trip
       function friendRequested(result) {
         var status = result;
-        // console.log(status.share_status);
         if (status.request_status == "no user") {
           $('#request_form').attr('hidden', true);
           $('#invite_friend_form').attr('hidden', false);
