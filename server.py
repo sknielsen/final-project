@@ -5,7 +5,7 @@ from model import User, Trip, Entry, Category, Share, connect_to_db, db, Friend
 import os
 from werkzeug.utils import secure_filename
 import bcrypt
-from helper_functions import allowed_file, has_access, send_registration_email, send_notification_email, ALLOWED_EXTENSIONS
+from helper_functions import allowed_file, has_access, send_registration_email, send_notification_email, ALLOWED_EXTENSIONS, send_share_request_email
 
 app = Flask(__name__)
 
@@ -261,7 +261,7 @@ def show_friends():
     user_id = session['logged_in_user']
     user = User.query.get(user_id)
     friends = user.all_friends
-    friend_requests = user.requested_friends
+    friend_requests = user.accepted_friends
     friend_requests = [request for request in friend_requests if not request.accepted]
 
     return render_template('friends.html', friends=friends, friend_requests=friend_requests)
@@ -291,6 +291,21 @@ def deny_friend():
 
     response = {'request_id': friend_id}
     return jsonify(response)
+
+@app.route('/share-request.json', methods=['POST'])
+def share_request():
+    """Send email notifying user of share request"""
+
+    trip_id = request.form.get("trip_id")
+    trip = Trip.query.get(trip_id)
+    to_email = trip.user.email
+    requester = User.query.get(session['logged_in_user']).name
+    location = trip.location
+    link = 'http://localhost:5000/trip/' + trip_id
+
+    send_share_request_email(to_email, requester, location, link)
+
+    return ""
 
 
 if __name__ == "__main__":

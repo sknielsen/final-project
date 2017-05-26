@@ -50,3 +50,16 @@ def send_notification_email(to_email, sharer, location, link):
     print(response.status_code)
     print(response.body)
     print(response.headers)
+
+
+def send_share_request_email(to_email, requester, location, link):
+    sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+    from_email = Email("trips@sojournal.com")
+    to_email = Email(to_email)
+    subject = "Your friend has asked you to share your trip with them!"
+    content = Content("text/html", "<p>" + requester + " has asked if you will share your trip to " + location + " with them!</p><br><br>Click <a href=\"" + link + "\">here</a> to see the trip.</p><br><br><p>-Our Team of Sojourners</p>")
+    mail = Mail(from_email, subject, to_email, content)
+    response = sg.client.mail.send.post(request_body=mail.get())
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)

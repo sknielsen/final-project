@@ -30,6 +30,9 @@
           <p class="trip-link">{% if trip.trip_id in shared_trips %}<a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a>{% else %}<span class="trip-name">{{ trip.name }}</span>{% endif %}</p>
           <p class="trip-location">{{ trip.location }}</p>
           <p class="trip-owner">Owner: {{ trip.user.email }}</p>
+          {% if trip.trip_id not in shared_trips %}
+          <button class="requestDetails" name="{{ trip.trip_id }}">Request Details</button>
+          {% endif %}
           </div>
         {% endfor %}
       {% endif %}
@@ -187,7 +190,7 @@
     var friendBtn = document.getElementById("requestFriend");
 
     // Get the <span> element that closes the modal
-    var friendSpan = document.getElementsByClassName("close")[4];
+    var friendSpan = document.getElementsByClassName("close")[3];
 
     // When the user clicks on the button, open the modal 
     friendBtn.onclick = function() {
@@ -246,6 +249,22 @@
     
       //Add event handler to share form
       $('#request_form').on('submit', requestFriend);
+
+    //Ajax request to accept friend
+    function shareRequest() {
+      $(".requestDetials[name=status]").attr('disabled', true);
+    }
+
+    //Ajax call
+    function requestDetails() {
+      var formInputs = {
+        "trip_id": this.getAttribute("name")
+      };
+      $.post("/share-request.json", formInputs, shareRequest);
+    }
+
+  // Add event handler to all friend request accept buttons
+  $('.requestDetails').on('click', requestDetails)
 
     function initialize() {
       initMap();
