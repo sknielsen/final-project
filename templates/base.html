@@ -4,7 +4,6 @@
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   <link rel="stylesheet" href="/static/style.css"/>
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
 </head>
@@ -30,7 +29,7 @@
         </li>
         </ul>
         <a class="navbar-link" id="login" href="#login">Login</a>/ 
-        <a class="navbar-link" id="createAccount">Register</a>
+        <a class="navbar-link" id="createAccount" href="#register">Register</a>
       {% endif %}
     </div>
   </nav>
@@ -79,64 +78,10 @@
   {% endblock %}
 
 </div>
- <script>
-    
-
-
-    // Get the modal to login
-    var modal = document.getElementById('login-form-popup');
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("login");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks on the button, open the modal 
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    // Get the modal register
-    var createModal = document.getElementById('create-form-popup');
-
-    // Get the button that opens the modal
-    var createBtn = document.getElementById("createAccount");
-
-    // When the user clicks on the button, open the modal 
-    createBtn.onclick = function() {
-        createModal.style.display = "block";
-    }
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[1];
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        createModal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == createModal) {
-            createModal.style.display = "none";
-        }
-    }
-
-
-   </script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="static/myscripts.js">
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&libraries=places&callback=initialize" async defer></script>
 </body>
 </html>
 

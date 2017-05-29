@@ -36,6 +36,19 @@ body {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
+.requestDetailsButton {
+  width: 120px;
+  height: 20px;
+  border: 0;
+  border-radius: 100px;
+  background-color: #f33cd1;
+  font-size: 12px;
+  font-weight: 100;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
 .tripsTable {
   width: 310px;
   height: 430px;
@@ -72,7 +85,6 @@ body {
 .buttonText {
   width: 65px;
   height: 19px;
-  /*font-family: AvenirNext;*/
   font-size: 14px;
   font-weight: 100;
   text-align: center;
@@ -83,14 +95,12 @@ body {
 .showTripsButton {
   width: 160px;
   height: 33px;
-  /*font-family: AvenirNext;*/
   font-size: 20px;
   font-weight: 500;
   color: #4a4a4a;
   border: 1px solid #f2f2f2;
   text-align: center;
   background-color: #f9f9f9;
-  /*margin: 0;*/
 }
 
 .navbar {
@@ -100,7 +110,6 @@ body {
 #navbar-brand {
   width: 67px;
   height: 27px;
-  /*font-family: AvenirNext;*/
   font-size: 20px;
   font-weight: bold;
   text-align: center;
@@ -187,6 +196,7 @@ body {
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
+
 .pac-container {
   z-index: 2000;
 }
@@ -197,6 +207,8 @@ body {
     padding: 20px;
     border: 1px solid #888;
     width: 50%; /* Could be more or less, depending on screen size */
+    border-radius: 4px;
+    box-shadow: 6px 6px 10px 0px rgba(138,130,138,.5);
 }
 
 /* The Close Button */
