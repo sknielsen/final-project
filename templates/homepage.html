@@ -71,5 +71,17 @@
 {% else %}
     <h2>This is the homepage</h2>          
 {% endif %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&libraries=places" async defer></script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="/static/myscripts.js"></script>
+<script>
+function initialize2() {
+  initMap();
+  initAutocomplete();
+  // initTripMap();
+  // initEntryAutocomplete();
+}
+google.maps.event.addDomListener(window, "load", initialize2);
+</script>
 
 {% endblock %}

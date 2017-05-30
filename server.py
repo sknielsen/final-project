@@ -163,14 +163,18 @@ def add_entry(trip_id):
     return redirect('/trip/%s/%s' % (trip_id, entry.entry_id))
 
 
-@app.route('/trip/<trip_id>/<entry_id>')
+@app.route('/entry/<entry_id>')
 def view_entry(trip_id, entry_id):
     """Show entry details"""
 
+    # trip_id = int(trip_id)
+    # print trip_id
+    entry = Entry.query.get(entry_id)
+    trip_id = entry.trip_id
     if not has_access(trip_id, session):
         flash("You do not have permission to view this page")
         return redirect('/')
-    else:    
+    else:   
         entry = Entry.query.get(entry_id)
 
         return render_template('view_entry.html', entry=entry)
