@@ -9,13 +9,13 @@ var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal 
 $(btn).on('click', function() {
-  Modal.style.display = "block";
+  modal.style.display = "block";
 });
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+$(span).on('click', function() {
     modal.style.display = "none";
-};
+});
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -57,7 +57,6 @@ window.onclick = function(event) {
   var tripAutocomplete;
 
   function initMap() {
-    console.log('inside initmap');
     geocoder = new google.maps.Geocoder();
     loc = new google.maps.LatLng("30","5");
     var mapOptions =
@@ -160,9 +159,9 @@ $(tripBtn).on('click', function() {
 });
 
 // When the user clicks on <span> (x), close the modal
-tripSpan.onclick = function() {
+$(tripSpan).on('click', function() {
     tripModal.style.display = "none";
-};
+});
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -186,11 +185,11 @@ $(friendBtn).on('click', function() {
 });
 
 // When the user clicks on <span> (x), close the modal
-friendSpan.onclick = function() {
+$(friendSpan).on('click', function() {
     friendModal.style.display = "none";
     $('#request_form').attr('hidden', false);
     $('#invite_friend_form').attr('hidden', true);
-};
+});
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -253,12 +252,6 @@ function requestDetails() {
 
 // Add event handler to all friend request accept buttons
 $('.requestDetails').on('click', requestDetails);
-
-// // Initialize maps on homepage and trip page
-// function initialize() {
-//   initMap();
-//   initAutocomplete();
-// }
 
 
 var tripLocation = $( '#trip-location' ).html();
@@ -374,9 +367,9 @@ $(entryBtn).on('click', function() {
 });
 
 // When the user clicks on <span> (x), close the modal
-entrySpan.onclick = function() {
+$(entrySpan).on('click', function() {
     entryModal.style.display = "none";
-};
+});
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -402,9 +395,9 @@ $(shareBtn).on('click', function() {
 });
 
 // When the user clicks on <span> (x), close the modal
-shareSpan.onclick = function() {
+$(shareSpan).on('click', function() {
     shareModal.style.display = "none";
-};
+});
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -453,11 +446,82 @@ function shareTrip(evt) {
 //Add event handler to share form
 $('#share_form').on('submit', shareTrip);
 
-//Initialize map on homepage and trip page
-// function initialize() {
-//   initMap();
-//   initAutocomplete();
-//   initTripMap();
-//   initEntryAutocomplete();
-// }
-// google.maps.event.addDomListener(window, "load", initialize);
+
+
+//View entry Page Javascript
+
+function btnClicked() {
+    var notesHtml = $('#notes').html();
+    var editableText = $("<textarea id=\"editNotes\"/>");
+    editableText.val(notesHtml);
+    $('#notes').replaceWith(editableText);
+    editableText.focus();
+    $('#updateNotes').hide();
+    $('#submitUpdate').removeAttr('hidden');
+    // console.log('got here');
+}
+
+function editableTextBlurred() {
+    var html = $('#editNotes').val();
+    var viewableText = $("<p id=\"notes\">");
+    viewableText.html(html);
+    $('#editNotes').replaceWith(viewableText);
+    $('#updateNotes').show();
+    $('#submitUpdate').attr('hidden', true);
+
+}
+
+$('#updateNotes').on("click", btnClicked);
+
+$('#submitUpdate').on("click", function() {
+    var formInputs = {
+        "notes": $("#editNotes").val(),
+        "entry": $('#entryId').html()
+    };
+
+    $.post("/update-notes",
+           formInputs,
+           editableTextBlurred);
+});
+
+
+
+// Friend page Javascript
+
+
+//Ajax request to accept friend
+function friendAccepted(result) {
+  var status = result['request_id'];
+  $("button[name=" + status + "]").remove();
+  $("div[name=" + status + "]").html('Accepted!');
+}
+
+//Ajax call
+function requestAccept() {
+  var formInputs = {
+    "response": this.getAttribute("name")
+  };
+  $.post("/accept-friend.json", formInputs, friendAccepted);
+}
+
+// Add event handler to all friend request accept buttons
+$('.accepted-friend').on('click', requestAccept);
+
+
+//Ajax request to accept friend
+function friendDenied(result) {
+  var status = result['request_id'];
+  $("button[name=" + status + "]").remove();
+  $("div[name=" + status + "]").html('Denied!');
+}
+
+//Ajax call
+function requestDeny() {
+  var formInputs = {
+    "response": this.getAttribute("name")
+  };
+  $.post("/deny-friend.json", formInputs, friendDenied);
+}
+
+// Add event handler to all friend request accept buttons
+$('.denied-friend').on('click', requestDeny);

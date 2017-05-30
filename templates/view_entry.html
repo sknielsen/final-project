@@ -12,41 +12,4 @@
 <!-- <img src="/static/images/category {{ entry.type_id }}"> -->
 
 <br><a href="/trip/{{ entry.trip_id }}">Back to trip</a>
-<script>
-
-function btnClicked() {
-    var notesHtml = $('#notes').html();
-    var editableText = $("<textarea id=\"editNotes\"/>");
-    editableText.val(notesHtml);
-    $('#notes').replaceWith(editableText);
-    editableText.focus();
-    $('#updateNotes').hide();
-    $('#submitUpdate').show()
-
-}
-
-function editableTextBlurred() {
-    var html = $('#editNotes').val();
-    var viewableText = $("<div>");
-    viewableText.html(html);
-    $('#editNotes').replaceWith(viewableText);
-    $('#updateNotes').show();
-    $('#submitUpdate').hide()
-
-}
-
-$('#updateNotes').on("click", btnClicked);
-
-$('#submitUpdate').on("click", function() {
-    var formInputs = {
-        "notes": $("#editNotes").val(),
-        "entry": $('#entryId').html()
-    };
-
-    $.post("/update-notes", 
-           formInputs,
-           editableTextBlurred);
-});
-
-</script>
 {% endblock %}

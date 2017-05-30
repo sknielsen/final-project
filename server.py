@@ -164,7 +164,7 @@ def add_entry(trip_id):
 
 
 @app.route('/entry/<entry_id>')
-def view_entry(trip_id, entry_id):
+def view_entry(entry_id):
     """Show entry details"""
 
     # trip_id = int(trip_id)
@@ -174,7 +174,7 @@ def view_entry(trip_id, entry_id):
     if not has_access(trip_id, session):
         flash("You do not have permission to view this page")
         return redirect('/')
-    else:   
+    else:
         entry = Entry.query.get(entry_id)
 
         return render_template('view_entry.html', entry=entry)
@@ -247,6 +247,7 @@ def request_friend():
         request_results['request_status'] = 'no user'
         return jsonify(request_results)
 
+
 @app.route('/invite-user', methods=['POST'])
 def invite_user():
     """Invite new user to join with an email"""
@@ -295,6 +296,7 @@ def deny_friend():
 
     response = {'request_id': friend_id}
     return jsonify(response)
+
 
 @app.route('/share-request.json', methods=['POST'])
 def share_request():

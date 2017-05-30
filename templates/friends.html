@@ -21,45 +21,4 @@
     {% endif %}
     </ul>
   </div>
-
-  <script>
-
-    //Ajax request to accept friend
-    function friendAccepted(result) {
-      var status = result['request_id'];
-      $("button[name=status]").remove();
-      $("div[name=status]").html('Accepted!');
-    }
-
-    //Ajax call
-    function requestAccept() {
-      var formInputs = {
-        "response": this.getAttribute("name")
-      };
-      $.post("/accept-friend.json", formInputs, friendAccepted);
-    }
-
-  // Add event handler to all friend request accept buttons
-  $('.accepted-friend').on('click', requestAccept)
-
-
-    //Ajax request to accept friend
-    function friendDenied(result) {
-      var status = result['request_id'];
-      $("button[name=status]").remove();
-      $("div[name=status]").html('Denied!');
-    }
-
-    //Ajax call
-    function requestDeny() {
-      var formInputs = {
-        "response": this.getAttribute("name")
-      };
-      $.post("/deny-friend.json", formInputs, friendDenied);
-    }
-
-  // Add event handler to all friend request accept buttons
-  $('.denied-friend').on('click', requestDeny)
-
-  </script>
 {% endblock %}
