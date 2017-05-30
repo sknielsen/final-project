@@ -132,7 +132,7 @@ $("#viewShared").on('click', function() {
   visibleMarkers.forEach(function(marker) {
     marker.setMap(null);
   });
-  addMarkers('.theirTrip');
+  addTripMarkers('.theirTrip');
 });
 
 $("#viewTrips").on('click', function() {
@@ -141,7 +141,7 @@ $("#viewTrips").on('click', function() {
   visibleMarkers.forEach(function(marker) {
     marker.setMap(null);
   });
-  addMarkers('.myTrip');
+  addTripMarkers('.myTrip');
 });
 
   // Get the modal to add new trip

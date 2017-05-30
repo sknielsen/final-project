@@ -5,7 +5,7 @@
 <p id="entryId" hidden>{{ entry.entry_id }}</p>
 <p>{{ entry.address }}</p>
 <p id="notes">{{ entry.notes }}</p>
-<button id="updateNotes">Edit Notes</button>
+<button id="updateNotes" {% if session['logged_in_user'] != entry.trip.user_id %} hidden {% endif %}>Edit Notes</button>
 <button id="submitUpdate" hidden>Submit</button>
 <h4>{{ entry.category.name }}</h4>
 <img id="entryImage" src="/{{ entry.photo_location }}" height="300">
