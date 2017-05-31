@@ -268,6 +268,10 @@ function initTripMap() {
   addEntryMarkers();
 }
 
+
+
+// View trip page javascript
+
 var placeSearch, entryAutocomplete;
 
 function initEntryAutocomplete() {
@@ -303,7 +307,27 @@ function codeTripCenterAddress(address) {
   });
 }
 
-function codeEntryMarkerAddress(address, name, contentString) {
+//Marker icons by category
+var icons = {
+  Attraction: {
+    icon: '/static/Attraction_marker.png'
+  },
+  Accommodation: {
+    icon: '/static/Accommodation_marker.png'
+  },
+  Bar: {
+    icon: '/static/Bar_marker.png'
+  },
+  Restaurant: {
+    icon: '/static/Restaurant_marker.png'
+  },
+  Other: {
+    icon: '/static/Other_marker.png'
+  }
+};
+
+//Place markers on map for each entry
+function codeEntryMarkerAddress(address, name, markerIcon, contentString) {
   // Change the marker address in to latlong and place parker at the latlong
   geocoder.geocode( {address:address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
@@ -312,6 +336,7 @@ function codeEntryMarkerAddress(address, name, contentString) {
       var marker = new google.maps.Marker({
           map: tripMap,
           position: results[0].geometry.location,
+          icon: markerIcon,
           title: name
       });
       var infowindow = new google.maps.InfoWindow({
@@ -327,13 +352,15 @@ function codeEntryMarkerAddress(address, name, contentString) {
   });
 }
 
-
+//Set info for markers for each entry
 function addEntryMarkers() {
   // Add markers for each entry to the map
   $( ".entry" ).each(function() {
   var address = $(this).children(".entry-address").html();
   var name = $(this).children(".entry-link").children(".entry-name").html();
   var category = $(this).children(".entry-category").html();
+  var markerIcon = icons[category].icon
+  category = '/static/' + category + '.png';
   var photo = $(this).children(".entry-photo").html();
   var notes = $(this).children(".entry-notes").html();
   var link = $(this).children(".entry-link").children(".entry-name").attr("href");
@@ -341,18 +368,18 @@ function addEntryMarkers() {
       '<span id="popupBanner"><h1 id="popupHeader"><a href=\"' + link + '\">' + name + '</a></h1></span>'+
       '<img src=\"/'+photo+'\" width="300"</img>'+
       '<div id="bodyContent">'+
-      '<p>'+category+'</p>'+
+      '<img src=\"'+category+'\"></img>'+
       '<p>'+address+'</p>'+
       '<p>'+notes+'</p>'+
       // '<img src=\"/'+photo+'\" height="100"</img>'+
       '</div>'+
       '</div>';
-  codeEntryMarkerAddress(address, name, contentString);
+  codeEntryMarkerAddress(address, name, markerIcon, contentString);
 });
 }
 
 
-// Get the modal
+// Get the modal to add a new entry
 var entryModal = document.getElementById('entry-form-popup');
 
 // Get the button that opens the modal
@@ -380,7 +407,7 @@ window.onclick = function(event) {
 
 
 
-// Get the modal
+// Get the modal to share trip
 var shareModal = document.getElementById('share-form-popup');
 
 // Get the button that opens the modal

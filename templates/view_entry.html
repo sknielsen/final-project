@@ -3,13 +3,14 @@
 
 <h2>{{ entry.name }}</h2>
 <p id="entryId" hidden>{{ entry.entry_id }}</p>
+<img src="/static/{{ entry.category.name }}.png">
 <p>{{ entry.address }}</p>
 <p id="notes">{{ entry.notes }}</p>
 <button id="updateNotes" {% if session['logged_in_user'] != entry.trip.user_id %} hidden {% endif %}>Edit Notes</button>
 <button id="submitUpdate" hidden>Submit</button>
-<h4>{{ entry.category.name }}</h4>
+<!-- <h4>{{ entry.category.name }}</h4> -->
 <img id="entryImage" src="/{{ entry.photo_location }}" height="300">
-<!-- <img src="/static/images/category {{ entry.type_id }}"> -->
+
 
 <br><a href="/trip/{{ entry.trip_id }}">Back to trip</a>
 {% endblock %}
