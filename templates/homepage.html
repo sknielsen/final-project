@@ -2,58 +2,64 @@
 {% block content %}
 
 {% if 'logged_in_user' in session %}
-<div class="tripsTable">
-  <ul class="nav nav-tabs">
-    <li class="active buttonText showTripsButton" id="viewTrips"><a data-toggle="tab" href="#yourTrips">Your Trips</a></li>
-    <li class="buttonText showTripsButton" id="viewShared"><a data-toggle="tab" href="#sharedTrips">Friends Trips</a></li>
-  </ul>
-  <div class="showTrips" id="yourTrips">
-  {% if not trips %}
-    <p>You dont have any trips yet!</p>
-    {% else %}
-        {% for trip in trips %}
-          <div class="myTrip tripItem">
-          <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a></p>
-          <p class="trip-location">{{ trip.location }}</p>
-          <p class="trip-date">{{ trip.date }}</p>
-          </div>
-        {% endfor %}
-    {% endif %}
-  </div>
-  <div class="showTrips" id="sharedTrips" hidden>
-  {% if not friends_trips %}
-    <p>No friends trips to see!</p>
-    {% else %}
-        {% for trip in friends_trips %}
-          <div class="theirTrip tripItem">
-          <p class="trip-link">{% if trip.trip_id in shared_trips %}<a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a>{% else %}<span class="trip-name">{{ trip.name }}</span>{% endif %}</p>
-          <p class="trip-location">{{ trip.location }}</p>
-          <p class="trip-owner">Owner: {{ trip.user.email }}</p>
-          {% if trip.trip_id not in shared_trips %}
-          <button class="requestDetails requestDetailsButton" name="{{ trip.trip_id }}">Request Details</button>
-          {% endif %}
-          </div>
-        {% endfor %}
+<div id="landing-page">
+  <!-- <div id="homepage-left"> -->
+    <div class="tripsTable">
+      <ul class="nav nav-tabs">
+        <li class="active buttonText showTripsButton" id="viewTrips"><a data-toggle="tab" href="#yourTrips">Your Trips</a></li>
+        <li class="buttonText showTripsButton" id="viewShared"><a data-toggle="tab" href="#sharedTrips">Friends Trips</a></li>
+      </ul>
+    <div class="showTrips" id="yourTrips">
+    {% if not trips %}
+      <p>You dont have any trips yet!</p>
+      {% else %}
+          {% for trip in trips %}
+            <div class="myTrip tripItem">
+            <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a></p>
+            <p class="trip-location">{{ trip.location }}</p>
+            <p class="trip-date">{{ trip.date }}</p>
+            </div>
+          {% endfor %}
       {% endif %}
-  </div>
-    <button class="addNewButton" id="addTrip">Add New Trip</button>
     </div>
-  <div id="trip-map"></div>
-      <!-- Show modal -->
-  <div id="trip-form-popup" class="modal">
-    <div class="form-content">
-      <span class="close" id ="closeNewTrip">&times;</span>
-      <h2>New Trip</h2>
-      <form id="trip_form" action="/add-trip" method="POST">Name: 
-        <input type="text" id="name" name="name"><br>Location: 
-        <input id="autocomplete" name="location" placeholder="Where are you going?" type="text"><br>Date:
-        <input type="date" id="date" name="date"><br>
-        <input type="submit" id="submit_button">
-      </form>
+    <div class="showTrips" id="sharedTrips" hidden>
+    {% if not friends_trips %}
+      <p>No friends trips to see!</p>
+      {% else %}
+          {% for trip in friends_trips %}
+            <div class="theirTrip tripItem">
+            <p class="trip-link">{% if trip.trip_id in shared_trips %}<a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a>{% else %}<span class="trip-name">{{ trip.name }}</span>{% endif %}</p>
+            <p class="trip-location">{{ trip.location }}</p>
+            <p class="trip-owner">Owner: {{ trip.user.email }}</p>
+            {% if trip.trip_id not in shared_trips %}
+            <button class="requestDetails requestDetailsButton" name="{{ trip.trip_id }}">Request Details</button>
+            {% endif %}
+            </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+      <button class="addNewButton" id="addTrip">Add New Trip</button>
+    </div>
+  <!-- </div> -->
+    <div id="trip-map"></div>
+        <!-- Show modal -->
+    <div id="trip-form-popup" class="modal">
+      <div class="form-content">
+        <span class="close" id ="closeNewTrip">&times;</span>
+        <h2>New Trip</h2>
+        <form id="trip_form" action="/add-trip" method="POST">Name: 
+          <input type="text" id="name" name="name"><br>Location: 
+          <input id="autocomplete" name="location" placeholder="Where are you going?" type="text"><br>Date:
+          <input type="date" id="date" name="date"><br>
+          <input type="submit" id="submit_button">
+        </form>
+        </div>
       </div>
-    </div>
+  </div>
 {% else %}
-    <h2>This is the homepage</h2>          
+  <div class="background-image">
+    <h2 id="homepage-header">Welcome to SOJOURNAL</h2>
+  </div>     
 {% endif %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&libraries=places&callback=initialize2" async defer></script>
 <script>
