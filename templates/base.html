@@ -42,7 +42,7 @@
   <!-- Show modals -->
     <div id="login-form-popup" class="modal">
         <div class="form-content">
-          <span class="close">&times;</span>
+          <span class="close" id="closeLogin">&times;</span>
             <h2>Login</h2>
             <form id="login_form" action="/check-login" method="POST">Email: 
               <input type="email" id="email" name="email" default="email"><br>Password: 
@@ -54,7 +54,7 @@
 
     <div id="create-form-popup" class="modal">
         <div class="form-content">
-          <span class="close">&times;</span>
+          <span class="close" id="closeCreateAccount">&times;</span>
           <h2>Create Account</h2>
           <form id="new_user_form" action="/create-account" method="POST">Email: 
             <input type="email" id="email" name="email" default="email" required><br>Password: 

@@ -1,129 +1,116 @@
-// Get the modal to login
-var modal = document.getElementById('login-form-popup');
-
-// Get the button that opens the modal
-var btn = document.getElementById("login");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
+//Base html javascript
+//Set up login modal
 // When the user clicks on the button, open the modal 
-$(btn).on('click', function() {
-  modal.style.display = "block";
+$('#login').on('click', function() {
+  $('#login-form-popup').show();
 });
 
 // When the user clicks on <span> (x), close the modal
-$(span).on('click', function() {
-    modal.style.display = "none";
+$('#closeLogin').on('click', function() {
+    $('#login-form-popup').hide();
 });
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+$(document).click(function (e) {
+    if ($(e.target).is('#login-form-popup')) {
+        $('#login-form-popup').fadeOut(50);
     }
-};
-
-// Get the modal to register
-var createModal = document.getElementById('create-form-popup');
-
-// Get the button that opens the modal
-var createBtn = document.getElementById("createAccount");
-
-// When the user clicks on the button, open the modal 
-$(createBtn).on('click', function() {
-  createModal.style.display = "block";
-});
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[1];
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    createModal.style.display = "none";
-};
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == createModal) {
-        createModal.style.display = "none";
-    }
-};
-
-// debugger;
-//Set up map on trips page
-  var map;
-  var visibleMarkers = [];
-  var tripAutocomplete;
-
-  function initMap() {
-    geocoder = new google.maps.Geocoder();
-    loc = new google.maps.LatLng("30","5");
-    var mapOptions =
-    {
-      zoom: 2,
-      center: loc
-    };
-    map = new google.maps.Map(document.getElementById('trip-map'), mapOptions);
-    addTripMarkers('.myTrip');
-  }
-
-  function initAutocomplete() {
-    // Create the autocomplete object, restricting the search to geographical
-    // location types.
-    tripAutocomplete = new google.maps.places.Autocomplete(
-        /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
-        {types: ['(regions)']});
-  }
-
-  function codeTripMarkerAddress(address, name, contentString) {
-    geocoder.geocode( {address:address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        // place a marker at the location
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location,
-            animation: google.maps.Animation.DROP,
-            title: name
-        });
-        visibleMarkers.push(marker);
-        var infowindow = new google.maps.InfoWindow({
-        content: contentString
-        });
-        marker.addListener('click', function() {
-        infowindow.open(map, marker);
-    });
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-     }
-    });
-  }
-
-
-  function addTripMarkers(className) {
-    $( className ).each(function() {
-    var location = $(this).children(".trip-location").html();
-    var name = $(this).children(".trip-link").children(".trip-name").html();
-    var link = $(this).children(".trip-link").children(".trip-name").attr("href");
-    var contentString;
-    if (typeof link != 'undefined') {
-      contentString = '<div>'+
-        '<h1><a href=\"'+link+'\">'+name+'</a></h1>'+
-        '<div>'+
-        '<p>'+location+'</p>'+
-        '</div>'+
-        '</div>';
-    } else {
-      contentString = '<div>'+
-        '<h1>'+name+'</h1>'+
-        '<div>'+
-        '<p>'+location+'</p>'+
-        '</div>'+
-        '</div>';
-    }
-    codeTripMarkerAddress(location, name, contentString);
   });
+
+
+//Set up register modal
+// When the user clicks on the button, open the modal 
+$('#createAccount').on('click', function() {
+  $('#create-form-popup').show();
+});
+
+// When the user clicks on <span> (x), close the modal
+$('#closeCreateAccount').on('click', function() {
+    $('#create-form-popup').hide();
+});
+
+// When the user clicks anywhere outside of the modal, close it
+$(document).click(function (e) {
+    if ($(e.target).is('#create-form-popup')) {
+        $('#create-form-popup').fadeOut(50);
+    }
+  });
+
+
+
+//Homepage javascript
+//Set up map on trips page
+var map;
+var visibleMarkers = [];
+var tripAutocomplete;
+
+function initMap() {
+  geocoder = new google.maps.Geocoder();
+  loc = new google.maps.LatLng("30","5");
+  var mapOptions =
+  {
+    zoom: 2,
+    center: loc
+  };
+  map = new google.maps.Map(document.getElementById('trip-map'), mapOptions);
+  addTripMarkers('.myTrip');
+}
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  tripAutocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+      {types: ['(regions)']});
+}
+
+function codeTripMarkerAddress(address, name, contentString) {
+  geocoder.geocode( {address:address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      // place a marker at the location
+      var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location,
+          animation: google.maps.Animation.DROP,
+          title: name
+      });
+      visibleMarkers.push(marker);
+      var infowindow = new google.maps.InfoWindow({
+      content: contentString
+      });
+      marker.addListener('click', function() {
+      infowindow.open(map, marker);
+  });
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+   }
+  });
+}
+
+function addTripMarkers(className) {
+  $( className ).each(function() {
+  var location = $(this).children(".trip-location").html();
+  var name = $(this).children(".trip-link").children(".trip-name").html();
+  var link = $(this).children(".trip-link").children(".trip-name").attr("href");
+  var contentString;
+  if (typeof link != 'undefined') {
+    contentString = '<div>'+
+      '<h1><a href=\"'+link+'\">'+name+'</a></h1>'+
+      '<div>'+
+      '<p>'+location+'</p>'+
+      '</div>'+
+      '</div>';
+  } else {
+    contentString = '<div>'+
+      '<h1>'+name+'</h1>'+
+      '<div>'+
+      '<p>'+location+'</p>'+
+      '</div>'+
+      '</div>';
   }
+  codeTripMarkerAddress(location, name, contentString);
+});
+}
 
   //Add event handler to trip buttons
 $("#viewShared").on('click', function() {
@@ -144,98 +131,78 @@ $("#viewTrips").on('click', function() {
   addTripMarkers('.myTrip');
 });
 
-  // Get the modal to add new trip
-var tripModal = document.getElementById('trip-form-popup');
-
-// Get the button that opens the modal
-var tripBtn = document.getElementById("addTrip");
-
-// Get the <span> element that closes the modal
-var tripSpan = document.getElementsByClassName("close")[2];
-
+//Set up add new trip modal
 // When the user clicks on the button, open the modal 
-$(tripBtn).on('click', function() {
-  tripModal.style.display = "block";
+$('#addTrip').on('click', function() {
+  $('#trip-form-popup').show();
 });
 
 // When the user clicks on <span> (x), close the modal
-$(tripSpan).on('click', function() {
-    tripModal.style.display = "none";
+$('#closeNewTrip').on('click', function() {
+    $('#trip-form-popup').hide();
 });
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == tripModal) {
-        tripModal.style.display = "none";
-  }
-};
-
-// Get the modal to request friend
-var friendModal = document.getElementById('friend-form-popup');
-
-// Get the button that opens the modal
-var friendBtn = document.getElementById("requestFriend");
-
-// Get the <span> element that closes the modal
-var friendSpan = document.getElementsByClassName("close")[3];
-
-// When the user clicks on the button, open the modal 
-$(friendBtn).on('click', function() {
-  friendModal.style.display = "block";
-});
-
-// When the user clicks on <span> (x), close the modal
-$(friendSpan).on('click', function() {
-    friendModal.style.display = "none";
-    $('#request_form').attr('hidden', false);
-    $('#invite_friend_form').attr('hidden', true);
-});
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == friendModal) {
-        friendModal.style.display = "none";
-        $('#request_form').attr('hidden', false);
-        $('#invite_friend_form').attr('hidden', true);
-  }
-};
-
-  function flashMessage(message) {
-    $('.flash').addClass('alert');
-    $('.flash').html(message);
-    setTimeout(function() {
-      $('.flash').empty();
-      $('.flash').removeClass('alert');
-    }, 3000);
-  }
-
-  //Ajax request to share trip
-  function friendRequested(result) {
-    var status = result;
-    if (status.request_status == "no user") {
-      $('#request_form').attr('hidden', true);
-      $('#invite_friend_form').attr('hidden', false);
-      $('#requestEmail').val($('#inviteFriendEmail').val());
-    } else if (status.request_status == "already friends") {
-      friendModal.style.display = "none";
-      flashMessage("You are already friends with that user!");
-    } else {
-      friendModal.style.display = "none";
-      flashMessage("Friend request sent!");
+$(document).click(function (e) {
+    if ($(e.target).is('#trip-form-popup')) {
+        $('#trip-form-popup').fadeOut(50);
     }
-  }
+  });
 
-  //Ajax call
-  function requestFriend(evt) {
-    evt.preventDefault();
-    var formInputs = {
-      "email": $('#friendEmail').val()
-    };
-    $.post("/request-friend.json", formInputs, friendRequested);
-  }
+//Set up request friend modal
+// When the user clicks on the button, open the modal 
+$('#requestFriend').on('click', function() {
+  $('#friend-form-popup').show();
+});
 
-  //Add event handler to share form
-  $('#request_form').on('submit', requestFriend);
+// When the user clicks on <span> (x), close the modal
+$('#closeAddFriend').on('click', function() {
+    $('#friend-form-popup').hide();
+});
+
+// When the user clicks anywhere outside of the modal, close it
+$(document).click(function (e) {
+    if ($(e.target).is('#friend-form-popup')) {
+        $('#friend-form-popup').fadeOut(50);
+    }
+  });
+
+function flashMessage(message) {
+  $('.flash').addClass('alert');
+  $('.flash').html(message);
+  setTimeout(function() {
+    $('.flash').empty();
+    $('.flash').removeClass('alert');
+  }, 3000);
+}
+
+//Ajax request to share trip
+function friendRequested(result) {
+  var status = result;
+  if (status.request_status == "no user") {
+    $('#request_form').attr('hidden', true);
+    $('#invite_friend_form').attr('hidden', false);
+    $('#requestEmail').val($('#inviteFriendEmail').val());
+  } else if (status.request_status == "already friends") {
+    friendModal.style.display = "none";
+    flashMessage("You are already friends with that user!");
+  } else {
+    friendModal.style.display = "none";
+    flashMessage("Friend request sent!");
+  }
+}
+
+//Ajax call
+function requestFriend(evt) {
+  evt.preventDefault();
+  var formInputs = {
+    "email": $('#friendEmail').val()
+  };
+  $.post("/request-friend.json", formInputs, friendRequested);
+}
+
+//Add event handler to share form
+$('#request_form').on('submit', requestFriend);
 
 //Ajax request to accept friend
 function shareRequest() {
@@ -271,7 +238,6 @@ function initTripMap() {
 
 
 // View trip page javascript
-
 var placeSearch, entryAutocomplete;
 
 function initEntryAutocomplete() {
@@ -359,7 +325,7 @@ function addEntryMarkers() {
   var address = $(this).children(".entry-address").html();
   var name = $(this).children(".entry-link").children(".entry-name").html();
   var category = $(this).children(".entry-category").html();
-  var markerIcon = icons[category].icon
+  var markerIcon = icons[category].icon;
   category = '/static/' + category + '.png';
   var photo = $(this).children(".entry-photo").html();
   var notes = $(this).children(".entry-notes").html();
@@ -378,60 +344,41 @@ function addEntryMarkers() {
 });
 }
 
-
-// Get the modal to add a new entry
-var entryModal = document.getElementById('entry-form-popup');
-
-// Get the button that opens the modal
-var entryBtn = document.getElementById("createEntry");
-
-// Get the <span> element that closes the modal
-var entrySpan = document.getElementsByClassName("close")[2];
-
+//Set up add new entry modal
 // When the user clicks on the button, open the modal 
-$(entryBtn).on('click', function() {
-  entryModal.style.display = "block";
+$('#createEntry').on('click', function() {
+  $('#entry-form-popup').show();
 });
 
 // When the user clicks on <span> (x), close the modal
-$(entrySpan).on('click', function() {
-    entryModal.style.display = "none";
+$('#closeNewEntry').on('click', function() {
+    $('#entry-form-popup').hide();
 });
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == entryModal) {
-        entryModal.style.display = "none";
+$(document).click(function (e) {
+    if ($(e.target).is('#entry-form-popup')) {
+        $('#entry-form-popup').fadeOut(50);
     }
-};
+  });
 
-
-
-// Get the modal to share trip
-var shareModal = document.getElementById('share-form-popup');
-
-// Get the button that opens the modal
-var shareBtn = document.getElementById("shareTrip");
-
-// Get the <span> element that closes the modal
-var shareSpan = document.getElementsByClassName("close")[3];
-
+//Set up share trip modal
 // When the user clicks on the button, open the modal 
-$(shareBtn).on('click', function() {
-  shareModal.style.display = "block";
+$('#shareTrip').on('click', function() {
+  $('#share-form-popup').show();
 });
 
 // When the user clicks on <span> (x), close the modal
-$(shareSpan).on('click', function() {
-    shareModal.style.display = "none";
+$('#closeShareTrip').on('click', function() {
+    $('#share-form-popup').hide();
 });
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == shareModal) {
-        shareModal.style.display = "none";
+$(document).click(function (e) {
+    if ($(e.target).is('#share-form-popup')) {
+        $('#share-form-popup').fadeOut(50);
     }
-};
+  });
 
 function flashMessage(message) {
   $('.flash').addClass('alert');
@@ -514,8 +461,6 @@ $('#submitUpdate').on("click", function() {
 
 
 // Friend page Javascript
-
-
 //Ajax request to accept friend
 function friendAccepted(result) {
   var status = result['request_id'];

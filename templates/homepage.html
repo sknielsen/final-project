@@ -37,13 +37,12 @@
       {% endif %}
   </div>
     <button class="addNewButton" id="addTrip">Add New Trip</button>
-    <button class="addNewButton" id="requestFriend">Request Friend</button>
-</div>
+    </div>
   <div id="trip-map"></div>
-      <!-- Show modals -->
+      <!-- Show modal -->
   <div id="trip-form-popup" class="modal">
     <div class="form-content">
-      <span class="close">&times;</span>
+      <span class="close" id ="closeNewTrip">&times;</span>
       <h2>New Trip</h2>
       <form id="trip_form" action="/add-trip" method="POST">Name: 
         <input type="text" id="name" name="name"><br>Location: 
@@ -51,21 +50,6 @@
         <input type="date" id="date" name="date"><br>
         <input type="submit" id="submit_button">
       </form>
-      </div>
-    </div>
-    <!-- Show modals -->
-  <div id="friend-form-popup" class="modal">
-    <div class="form-content">
-      <span class="close">&times;</span>
-      <h2>Request Friend</h2>
-        <form id="request_form" method="POST">Who would you like to become friends with?<br>
-          <input id="friendEmail" placeholder="Email Address" type="text" name="requestEmail">
-          <input type="submit" id="request_submit_button">
-        </form>
-        <form id="invite_friend_form" action="/invite-user" method="POST" hidden>This user does not exist would you like to invite them to join SOJOURNAL?<br>
-              <input id="inviteFriendEmail" placeholder="Email Address" type="text" name="inviteEmail">
-              <input type="submit" id="invite_friend_submit_button">
-        </form>
       </div>
     </div>
 {% else %}

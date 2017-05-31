@@ -2,6 +2,7 @@
 {% block content %}
 <div>
     <h2>Friends</h2>
+    <button class="addNewButton" id="requestFriend">Request Friend</button>
     <ul>Friend Requests
     {% if not friend_requests %}
       <p>You dont have any outstanding friend requests!</p>
@@ -21,4 +22,20 @@
     {% endif %}
     </ul>
   </div>
+
+<!--Friend Modal-->
+  <div id="friend-form-popup" class="modal">
+    <div class="form-content">
+      <span class="close" id="closeAddFriend">&times;</span>
+      <h2>Request Friend</h2>
+        <form id="request_form" method="POST">Who would you like to become friends with?<br>
+          <input id="friendEmail" placeholder="Email Address" type="text" name="requestEmail">
+          <input type="submit" id="request_submit_button">
+        </form>
+        <form id="invite_friend_form" action="/invite-user" method="POST" hidden>This user does not exist would you like to invite them to join SOJOURNAL?<br>
+              <input id="inviteFriendEmail" placeholder="Email Address" type="text" name="inviteEmail">
+              <input type="submit" id="invite_friend_submit_button">
+        </form>
+      </div>
+    </div>
 {% endblock %}

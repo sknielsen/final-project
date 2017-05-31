@@ -40,7 +40,7 @@
     <div id="entry-form-popup" class="modal">
         <!-- Modal content -->
         <div class="form-content">
-          <span class="close">&times;</span>
+          <span class="close" id="closeNewEntry">&times;</span>
           <h2>New Entry</h2>
             <form id="entry_form" action="/add-entry/{{ trip.trip_id }}" method="POST" enctype="multipart/form-data"> 
               <input id="entry-autocomplete" placeholder="Where did you go?" type="text" name="name">
@@ -62,7 +62,7 @@
       <div id="share-form-popup" class="modal">
         <!-- Modal content -->
         <div class="form-content">
-          <span class="close">&times;</span>
+          <span class="close" id="closeShareTrip">&times;</span>
           <h2>Share Trip</h2>
             <form id="share_form" method="POST">Who would you like to share this trip with?<br>
               <input id="shareEmail" placeholder="Email Address" type="text" name="shareEmail">
