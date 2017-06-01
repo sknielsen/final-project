@@ -43,7 +43,7 @@ body {
 }
 
 
-.addNewButton {
+/*.addNewButton {
   width: 145px;
   height: 36px;
   border: 0;
@@ -55,7 +55,7 @@ body {
   color: #ffffff;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   margin: 5px;
-}
+}*/
 
 .classic-button {
   width: 145px;
@@ -63,15 +63,19 @@ body {
   border: 0;
   border-radius: 100px;
   background-color: #f33cd1;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 100;
   text-align: center;
   color: #ffffff;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  /*margin: 5px;*/
+  margin: 10px;
 }
 
-.requestDetailsButton {
+.list-text {
+    margin-bottom: 0;
+}
+
+.request-details-button {
   width: 120px;
   height: 20px;
   border: 0;
@@ -82,26 +86,31 @@ body {
   text-align: center;
   color: #ffffff;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  margin: 5px;
 }
 
-.tripsTable {
+.trips-table {
   width: 310px;
-  height: 430px;
+  height: 460px;
   display: inline-block;
-  margin: 5px;
+  margin: 10px;
   padding: 10px;
   background-color: #f9f9f9;
   text-align: center;
   vertical-align: top;
 }
 
-.showTrips {
+.show-trips {
   width: 280px;
-  height: 380px;
+  height: 400px;
   padding: 10px;
   overflow: auto;
   margin: 0;
   text-align: center;
+}
+
+#add-trip {
+    margin: 20px;
 }
 
 #viewShared {
@@ -111,7 +120,7 @@ body {
 .tripItem {
   text-align: center;
   width: 280px;
-  height: 150px;
+  height: 100px;
   background-color: #ffffff;
   border: solid 1px #f2f2f2;
   margin: 0;
@@ -131,17 +140,32 @@ body {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-.showTripsButton {
-  width: 160px;
+.show-trips-button {
+  width: 170px;
   height: 33px;
-  font-size: 20px;
-  font-weight: 500;
-  color: #4a4a4a;
   border: 1px solid #f2f2f2;
-  text-align: center;
-  background-color: #f9f9f9;
+  text-align: left;
+  background-color: #ffffff;
 }
 
+.show-trips-text {
+    font-size: 20px;
+    color: #4a4a4a;
+    font-weight: 500;
+    text-align: left;
+}
+
+.trip-location, .trip-date, .trip-owner {
+    font-size: 14px;
+    font-weight: 200;
+    color: #4a4a4a;
+}
+
+.trip-link-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #4a4a4a;
+}
 .navbar {
     background-color: #1e0253;
 }

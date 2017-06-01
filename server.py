@@ -85,7 +85,6 @@ def check_login():
         user = User.query.filter_by(email=user_email).one()
         if bcrypt.checkpw(user_password.encode('utf8'), user.password.encode('utf8')):
             session['logged_in_user'] = user.user_id
-            flash('Hello, %s' % (user.name))
             return redirect('/')
         else:
             flash('Wrong password!')

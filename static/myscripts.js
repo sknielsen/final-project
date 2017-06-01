@@ -60,7 +60,7 @@ function initAutocomplete() {
   // Create the autocomplete object, restricting the search to geographical
   // location types.
   tripAutocomplete = new google.maps.places.Autocomplete(
-      /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+      /** @type {!HTMLInputElement} */(document.getElementById('trip-autocomplete')),
       {types: ['(regions)']});
 }
 
@@ -133,7 +133,7 @@ $("#viewTrips").on('click', function() {
 
 //Set up add new trip modal
 // When the user clicks on the button, open the modal 
-$('#addTrip').on('click', function() {
+$('#add-trip').on('click', function() {
   $('#trip-form-popup').show();
 });
 

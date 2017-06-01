@@ -4,41 +4,41 @@
 {% if 'logged_in_user' in session %}
 <div id="landing-page">
   <!-- <div id="homepage-left"> -->
-    <div class="tripsTable">
+    <div class="trips-table">
       <ul class="nav nav-tabs">
-        <li class="active buttonText showTripsButton" id="viewTrips"><a data-toggle="tab" href="#yourTrips">Your Trips</a></li>
-        <li class="buttonText showTripsButton" id="viewShared"><a data-toggle="tab" href="#sharedTrips">Friends Trips</a></li>
+        <li class="show-trips-button" id="viewTrips"><a class="show-trips-text" data-toggle="tab" href="#yourTrips">Your Trips</a></li>
+        <li class="show-trips-button" id="viewShared"><a class="show-trips-text" data-toggle="tab" href="#sharedTrips">Friends Trips</a></li>
       </ul>
-    <div class="showTrips" id="yourTrips">
+    <div class="show-trips" id="yourTrips">
     {% if not trips %}
       <p>You dont have any trips yet!</p>
       {% else %}
           {% for trip in trips %}
             <div class="myTrip tripItem">
-            <p class="trip-link"><a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a></p>
-            <p class="trip-location">{{ trip.location }}</p>
-            <p class="trip-date">{{ trip.date }}</p>
+            <p class="list-text trip-link"><a class="trip-link-text" href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a></p>
+            <p class="list-text trip-location">{{ trip.location }}</p>
+            <p class="list-text trip-date">{{ trip.date }}</p>
             </div>
           {% endfor %}
       {% endif %}
     </div>
-    <div class="showTrips" id="sharedTrips" hidden>
+    <div class="show-trips" id="sharedTrips" hidden>
     {% if not friends_trips %}
       <p>No friends trips to see!</p>
       {% else %}
           {% for trip in friends_trips %}
             <div class="theirTrip tripItem">
-            <p class="trip-link">{% if trip.trip_id in shared_trips %}<a href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a>{% else %}<span class="trip-name">{{ trip.name }}</span>{% endif %}</p>
-            <p class="trip-location">{{ trip.location }}</p>
-            <p class="trip-owner">Owner: {{ trip.user.email }}</p>
+            <p class="list-text trip-link-text">{% if trip.trip_id in shared_trips %}<a class="trip-link-text" href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a>{% else %}<span class="trip-name">{{ trip.name }}</span>{% endif %}</p>
+            <p class="list-text trip-location">{{ trip.location }}</p>
+            <p class="list-text trip-owner">Owner: {{ trip.user.email }}</p>
             {% if trip.trip_id not in shared_trips %}
-            <button class="requestDetails requestDetailsButton" name="{{ trip.trip_id }}">Request Details</button>
+            <button class="requestDetails request-details-button" name="{{ trip.trip_id }}">Request Details</button>
             {% endif %}
             </div>
           {% endfor %}
         {% endif %}
     </div>
-      <button class="addNewButton" id="addTrip">Add New Trip</button>
+      <button class="classic-button" id="add-trip">Add New Trip</button>
     </div>
   <!-- </div> -->
     <div id="trip-map"></div>
@@ -47,17 +47,18 @@
       <div class="form-content">
         <span class="close" id ="closeNewTrip">&times;</span>
         <h2>New Trip</h2>
-        <form id="trip_form" action="/add-trip" method="POST">Name: 
-          <input type="text" id="name" name="name"><br>Location: 
-          <input id="autocomplete" name="location" placeholder="Where are you going?" type="text"><br>Date:
-          <input type="date" id="date" name="date"><br>
-          <input type="submit" id="submit_button">
+        <form class="form-group" id="trip_form" action="/add-trip" method="POST">Name: 
+          <input class="form-control" type="text" id="name" name="name" placeholder="Enter trip name"><br>Location: 
+          <input class="form-control" id="trip-autocomplete" name="location" placeholder="Where are you going?" type="text"><br>Date:
+          <input class="form-control" type="date" id="date" name="date"><br>
+          <!-- <input type="submit" id="submit_button"> -->
+          <button class="classic-button" type="submit" id="add-trip-submit">Submit</button>
         </form>
         </div>
       </div>
   </div>
 {% else %}
-  <div class="background-image">
+  <div>
     <h2 id="homepage-header">Welcome to SOJOURNAL</h2>
   </div>     
 {% endif %}
