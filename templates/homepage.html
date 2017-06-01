@@ -15,7 +15,7 @@
       {% else %}
           {% for trip in trips %}
             <div class="myTrip tripItem">
-            <p class="list-text trip-link"><a class="trip-link-text" href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a></p>
+            <p class="list-text trip-link"><a class="trip-link-text trip-name" href="/trip/{{ trip.trip_id }}">{{ trip.name }}</a></p>
             <p class="list-text trip-location">{{ trip.location }}</p>
             <p class="list-text trip-date">{{ trip.date }}</p>
             </div>
@@ -28,7 +28,7 @@
       {% else %}
           {% for trip in friends_trips %}
             <div class="theirTrip tripItem">
-            <p class="list-text trip-link-text">{% if trip.trip_id in shared_trips %}<a class="trip-link-text" href="/trip/{{ trip.trip_id }}" class="trip-name">{{ trip.name }}</a>{% else %}<span class="trip-name">{{ trip.name }}</span>{% endif %}</p>
+            <p class="list-text trip-link">{% if trip.trip_id in shared_trips %}<a class="trip-link-text trip-name" href="/trip/{{ trip.trip_id }}">{{ trip.name }}</a>{% else %}<span class="trip-name trip-link-text">{{ trip.name }}</span>{% endif %}</p>
             <p class="list-text trip-location">{{ trip.location }}</p>
             <p class="list-text trip-owner">Owner: {{ trip.user.email }}</p>
             {% if trip.trip_id not in shared_trips %}
