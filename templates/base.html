@@ -68,9 +68,9 @@
 
   <!-- Show flashed messages -->
   {% with messages = get_flashed_messages() %}
-      {% for message in messages %}
-          <div class="alert alert-warning">{{ message }}</div>
-      {% endfor %}
+    {% for message in messages %}
+      <div class="alert alert-warning">{{ message }}</div>
+    {% endfor %}
   {% endwith %}
   <div class="flash alert-warning"></div>
 

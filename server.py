@@ -309,8 +309,9 @@ def share_request():
     link = 'http://localhost:5000/trip/' + trip_id
 
     send_share_request_email(to_email, requester, location, link)
-
-    return ""
+    
+    response = {'request_id': trip_id}
+    return jsonify(response)
 
 
 if __name__ == "__main__":

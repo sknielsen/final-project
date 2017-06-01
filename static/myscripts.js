@@ -149,64 +149,11 @@ $(document).click(function (e) {
     }
   });
 
-//Set up request friend modal
-// When the user clicks on the button, open the modal 
-$('#requestFriend').on('click', function() {
-  $('#friend-form-popup').show();
-});
-
-// When the user clicks on <span> (x), close the modal
-$('#closeAddFriend').on('click', function() {
-    $('#friend-form-popup').hide();
-});
-
-// When the user clicks anywhere outside of the modal, close it
-$(document).click(function (e) {
-    if ($(e.target).is('#friend-form-popup')) {
-        $('#friend-form-popup').fadeOut(50);
-    }
-  });
-
-function flashMessage(message) {
-  $('.flash').addClass('alert');
-  $('.flash').html(message);
-  setTimeout(function() {
-    $('.flash').empty();
-    $('.flash').removeClass('alert');
-  }, 3000);
-}
-
-//Ajax request to share trip
-function friendRequested(result) {
-  var status = result;
-  if (status.request_status == "no user") {
-    $('#request_form').attr('hidden', true);
-    $('#invite_friend_form').attr('hidden', false);
-    $('#requestEmail').val($('#inviteFriendEmail').val());
-  } else if (status.request_status == "already friends") {
-    friendModal.style.display = "none";
-    flashMessage("You are already friends with that user!");
-  } else {
-    friendModal.style.display = "none";
-    flashMessage("Friend request sent!");
-  }
-}
-
-//Ajax call
-function requestFriend(evt) {
-  evt.preventDefault();
-  var formInputs = {
-    "email": $('#friendEmail').val()
-  };
-  $.post("/request-friend.json", formInputs, friendRequested);
-}
-
-//Add event handler to share form
-$('#request_form').on('submit', requestFriend);
-
 //Ajax request to accept friend
-function shareRequest() {
-  $(".requestDetials[name=status]").attr('disabled', true);
+function shareRequest(result) {
+  var status = result['request_id'];
+  $(".requestDetails[name=" + status + "]").attr('disabled', true);
+  flashMessage("Trip details requested.");
 }
 
 //Ajax call
@@ -221,8 +168,12 @@ function requestDetails() {
 $('.requestDetails').on('click', requestDetails);
 
 
+
+
+// View trip page javascript
 var tripLocation = $( '#trip-location' ).html();
 var tripMap;
+var placeSearch, entryAutocomplete;
 
 function initTripMap() {
   geocoder = new google.maps.Geocoder();
@@ -235,10 +186,6 @@ function initTripMap() {
   addEntryMarkers();
 }
 
-
-
-// View trip page javascript
-var placeSearch, entryAutocomplete;
 
 function initEntryAutocomplete() {
   // Create the autocomplete object, restricting the search to geographical
@@ -400,11 +347,9 @@ function shareResults(result) {
   } else if (status.share_status == "already shared") {
     shareModal.style.display = "none";
     flashMessage("You have already shared this trip with that user.");
-    // alert("You have already shared this trip with that user");
   } else {
     shareModal.style.display = "none";
     flashMessage("Trip successfully shared!");
-    // alert("Trip successfully shared!");
   }
 }
 
@@ -422,8 +367,8 @@ $('#share_form').on('submit', shareTrip);
 
 
 
-//View entry Page Javascript
 
+//View entry Page Javascript
 function btnClicked() {
     var notesHtml = $('#notes').html();
     var editableText = $("<textarea id=\"editNotes\"/>");
@@ -457,6 +402,7 @@ $('#submitUpdate').on("click", function() {
            formInputs,
            editableTextBlurred);
 });
+
 
 
 
@@ -497,3 +443,58 @@ function requestDeny() {
 
 // Add event handler to all friend request accept buttons
 $('.denied-friend').on('click', requestDeny);
+
+//Set up request friend modal
+// When the user clicks on the button, open the modal 
+$('#requestFriend').on('click', function() {
+  $('#friend-form-popup').show();
+});
+
+// When the user clicks on <span> (x), close the modal
+$('#closeAddFriend').on('click', function() {
+    $('#friend-form-popup').hide();
+});
+
+// When the user clicks anywhere outside of the modal, close it
+$(document).click(function (e) {
+    if ($(e.target).is('#friend-form-popup')) {
+        $('#friend-form-popup').fadeOut(50);
+    }
+  });
+
+function flashMessage(message) {
+  $('.flash').addClass('alert');
+  $('.flash').html(message);
+  setTimeout(function() {
+    $('.flash').empty();
+    $('.flash').removeClass('alert');
+  }, 3000);
+}
+
+//Ajax request to add friend
+function friendRequested(result) {
+  var status = result;
+  if (status.request_status == "no user") {
+    $('#request_form').attr('hidden', true);
+    $('#invite_friend_form').attr('hidden', false);
+    $('#requestEmail').val($('#inviteFriendEmail').val());
+  } else if (status.request_status == "already friends") {
+    friendModal.style.display = "none";
+    flashMessage("You are already friends with that user!");
+  } else {
+    friendModal.style.display = "none";
+    flashMessage("Friend request sent!");
+  }
+}
+
+//Ajax call
+function requestFriend(evt) {
+  evt.preventDefault();
+  var formInputs = {
+    "email": $('#friendEmail').val()
+  };
+  $.post("/request-friend.json", formInputs, friendRequested);
+}
+
+//Add event handler to share form
+$('#request_form').on('submit', requestFriend);
