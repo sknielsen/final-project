@@ -1,40 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div id="tripBanner">
-  <h3 class="inline">{{ trip.name }}, </h3>
+<div class="landing-page">
+<div id="trip-banner">
+  <h3 class="inline" id="trip-banner-name">{{ trip.name }},</h3>
   <h4 class="inline" id="trip-location">{{ trip.location }}</h4>
-    {% if trip.user_id == session['logged_in_user'] %}
-      <button class="addNewButton inline" id="createEntry">Add new Entry</button>
-      <button class="addNewButton inline" id="shareTrip">Share Trip</button>
-    {% endif %}
-    {% if not entries %}
+  {% if trip.user_id == session['logged_in_user'] %}
+    <button class="classic-button inline" id="createEntry">Add new Entry</button>
+    <button class="classic-button inline" id="shareTrip">Share Trip</button>
+  {% endif %}
+  {% if not entries %}
     <p class="inline">You dont have any entries yet!</p>
-    {% else %}
-    <form class="inline" id="filterEntries" method="GET" action="/trip/{{ trip.trip_id }}">
+  {% else %}
+    <form class="inline" id="filter-entries" method="GET" action="/trip/{{ trip.trip_id }}">
       <select name="filter">
-          <option value="" {% if not filter_category %} selected {% endif %}>View All</option>
-          {% for category in categories %}
-          <option 
-            value="{{ category.category_id }}" 
-            {% if filter_category|int == category.category_id %} selected {% endif %}
-          >{{ category.name }}</option>
-          {% endfor %}
+      <option value="" {% if not filter_category %} selected {% endif %}>View All</option>
+      {% for category in categories %}
+        <option 
+          value="{{ category.category_id }}" 
+          {% if filter_category|int == category.category_id %} selected {% endif %}
+        >{{ category.name }}</option>
+        {% endfor %}
       </select>
       <input type="submit" value="filter">
     </form>
       <ul hidden> 
-        {% for entry in entries %}
-          <li class="entry">
-          <p class="entry-link"><a href="/entry/{{ entry.entry_id }}" class="entry-name">{{ entry.name }}</a></p>
-          <p class="entry-category">{{ entry.category.name }}</p>
-          <div class="entry-address" hidden>{{ entry.address }}</div>
-          <div class="entry-photo" hidden>{{ entry.photo_location }}</div>
-          <div class="entry-notes" hidden>{{ entry.notes }}</div>
-          </li>
-        {% endfor %}
+      {% for entry in entries %}
+        <li class="entry">
+        <p class="entry-link"><a href="/entry/{{ entry.entry_id }}" class="entry-name">{{ entry.name }}</a></p>
+        <p class="entry-category">{{ entry.category.name }}</p>
+        <div class="entry-address" hidden>{{ entry.address }}</div>
+        <div class="entry-photo" hidden>{{ entry.photo_location }}</div>
+        <div class="entry-notes" hidden>{{ entry.notes }}</div>
+        </li>
+      {% endfor %}
       </ul>
-    {% endif %}
+      {% endif %}
   </div>
     <div id="entry-map"></div>
     <div id="entry-form-popup" class="modal">
@@ -74,6 +75,7 @@
             </form>
           </div>
       </div>
+  </div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&libraries=places&callback=initialize1" async defer></script>
 <script>

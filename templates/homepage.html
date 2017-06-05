@@ -2,7 +2,7 @@
 {% block content %}
 
 {% if 'logged_in_user' in session %}
-<div id="landing-page">
+<div class="landing-page">
   <!-- <div id="homepage-left"> -->
     <div class="trips-table">
       <ul class="nav nav-tabs">
@@ -59,7 +59,7 @@
   </div>
 {% else %}
   <div>
-    <h2 id="homepage-header">Welcome to SOJOURNAL</h2>
+    <h2 id="homepage-header">Welcome to<br>SOJOURNAL</h2>
   </div>     
 {% endif %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3NV21lKUUJpatY7B06dgXTLQR0oikV4&libraries=places&callback=initialize2" async defer></script>
