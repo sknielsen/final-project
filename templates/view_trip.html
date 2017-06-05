@@ -54,12 +54,9 @@
                  {% for category in categories %}
                  <option value="{{ category.category_id }}">{{ category.name }}</option>
                  {% endfor %}
-              </select><br>
-              <label class="custom-file">
-                <input type="file" id="file" class="custom-file-input" name="pic">
-                <span class="custom-file-control"></span>
-              </label>
-              <!-- <input type="file" id="imageinput" name="pic"><br> -->
+              </select><br><br>
+              <label for="exampleInputFile">Photo</label>
+              <input type="file" id="exampleInputFile" name="pic"><br>
               <button class="classic-button" type="submit" id="add-entry-submit">Submit</button>
             </form>
           </div>

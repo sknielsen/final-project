@@ -91,6 +91,11 @@ body {
   margin: 5px;
 }
 
+#filter-entries {
+    position: absolute;
+    right: 40px;
+}
+
 #filter-submit {
     width: 60px;
     margin-left: 0;
@@ -125,10 +130,6 @@ body {
 
 #add-trip {
     margin: 20px;
-}
-
-#viewShared {
-    text-align: right;
 }
 
 .tripItem {
@@ -179,7 +180,6 @@ body {
   width: 170px;
   height: 33px;
   border: 1px solid #f2f2f2;
-  /*text-align: left;*/
   background-color: #ffffff;
 }
 
@@ -239,7 +239,7 @@ body {
 }
 
 #entry-map {
-  height: 600px;
+  height: 550px;
   width: 95%;
   display: inline-block;
   margin: 10px;

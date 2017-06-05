@@ -67,12 +67,16 @@ function initAutocomplete() {
 function codeTripMarkerAddress(address, name, contentString) {
   geocoder.geocode( {address:address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
+      var icon = {
+        url: '/static/unnamed_marker.png', // url
+        scaledSize: new google.maps.Size(25, 40), // scaled size
+    };
       // place a marker at the location
       var marker = new google.maps.Marker({
           map: map,
           position: results[0].geometry.location,
           animation: google.maps.Animation.DROP,
-          icon: '/static/unlabled_marker.png',
+          icon: icon,
           title: name
       });
       visibleMarkers.push(marker);
