@@ -95,14 +95,14 @@ function addTripMarkers(className) {
   var contentString;
   if (typeof link != 'undefined') {
     contentString = '<div>'+
-      '<h3><a href=\"'+link+'\">'+name+'</a></h3>'+
+      '<h3><a class="trip-link-text" href=\"'+link+'\">'+name+'</a></h3>'+
       '<div>'+
       '<p>'+location+'</p>'+
       '</div>'+
       '</div>';
   } else {
     contentString = '<div>'+
-      '<h3>'+name+'</h3>'+
+      '<h3 class="trip-link-text">'+name+'</h3>'+
       '<div>'+
       '<p>'+location+'</p>'+
       '</div>'+
