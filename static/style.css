@@ -31,26 +31,23 @@ body {
 
 .landing-page {
     background: #ffffff;
-    /*background-color: rgba(255, 255, 255, 0.9);*/
     width: 100%;
     height: 100%;
     border-radius: 10px;
     margin-top: 30px;
-    /*opacity: 0.8;*/
 }
 
 #trip-banner {
-  width: 100%;
+  width: 95%;
   height: 48px;
   background-color: transparent;
   display: inline-block;
   margin-top: 5px;
+  text-align: left;
 }
 
 #trip-banner-name {
-    width: 318px;
-    height: 49px;
-    font-size: 36px;
+    font-size: 32px;
     color: #4a4a4a;
     text-align: left;
 }
@@ -74,8 +71,6 @@ body {
   color: #ffffff;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   margin: 10px;
-  margin-left: 0;
-  margin-right: 0;
 }
 
 .list-text {
@@ -94,6 +89,12 @@ body {
   color: #ffffff;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   margin: 5px;
+}
+
+#filter-submit {
+    width: 60px;
+    margin-left: 0;
+    border-radius: 5px;
 }
 
 .trips-table {
@@ -139,6 +140,27 @@ body {
   margin: 0;
 }
 
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
 #friendsLink {
     margin-left: 30px;
 }
@@ -157,7 +179,7 @@ body {
   width: 170px;
   height: 33px;
   border: 1px solid #f2f2f2;
-  text-align: left;
+  /*text-align: left;*/
   background-color: #ffffff;
 }
 
@@ -165,7 +187,7 @@ body {
     font-size: 20px;
     color: #4a4a4a;
     font-weight: 500;
-    text-align: left;
+    /*text-align: left;*/
 }
 
 .trip-location, .trip-date, .trip-owner {
@@ -175,7 +197,7 @@ body {
 }
 
 .trip-link-text {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #4a4a4a;
 }
@@ -199,7 +221,6 @@ body {
 .navbar-link {
   width: 74px;
   height: 22px;
-  /*font-family: AvenirNext;*/
   font-size: 16px;
   font-weight: 600;
   text-align: center;
@@ -225,41 +246,50 @@ body {
   text-align: right;
 }
 
-#content {
-  width: 320px;
-  height: 400px;
+#popup-content {
+  width: 350px;
+  height: 460px;
   background-color: #f9f9f9;
-}
-
-#popupBanner {
-  width: 300px;
-  height: 48px;
-  background-color: #ffffff;
-  border: solid 1px #f2f2f2;
-  margin: 10px
-}
-
-#popupHeader {
-  width: 300px;
-  height: 33px;
-  /*font-family: AvenirNext;*/
-  font-size: 24px;
-  font-weight: 500;
-  color: #4a4a4a;
-  margin: 0;
   text-align: center;
-  background-color: #ffffff;
-  margin: 10px;
-
 }
 
-#bodyContent {
-  width: 300px;
-  height: 133px;
+#popup-banner {
+  width: 100%;
+  height: 40px;
   background-color: #ffffff;
-  border: solid 1px #f2f2f2;
-  margin: 10px;
+  margin-bottom: 10px;
+  vertical-align: bottom;
 }
+
+.popup-location {
+    width: 92%;
+    height: 80px;
+    background-color: #ffffff;
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+.popup-category {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.popup-address {
+    display: inline-block;
+    vertical-align: middle; 
+}
+
+.popup-notes {
+    width: 92%;
+    height: 80px;
+    background-color: #ffffff;
+    margin: 10px;
+    text-align: center;
+    padding: 20px;
+}
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */

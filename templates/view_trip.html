@@ -13,7 +13,7 @@
     <p class="inline">You dont have any entries yet!</p>
   {% else %}
     <form class="inline" id="filter-entries" method="GET" action="/trip/{{ trip.trip_id }}">
-      <select name="filter">
+      <select class="custom-select" name="filter">
       <option value="" {% if not filter_category %} selected {% endif %}>View All</option>
       {% for category in categories %}
         <option 
@@ -22,7 +22,8 @@
         >{{ category.name }}</option>
         {% endfor %}
       </select>
-      <input type="submit" value="filter">
+      <!-- <input type="submit" value="filter"> -->
+      <button class="classic-button" type="submit" id="filter-submit">Filter</button>
     </form>
       <ul hidden> 
       {% for entry in entries %}
@@ -43,19 +44,23 @@
         <div class="form-content">
           <span class="close" id="closeNewEntry">&times;</span>
           <h2>New Entry</h2>
-            <form id="entry_form" action="/add-entry/{{ trip.trip_id }}" method="POST" enctype="multipart/form-data"> 
-              <input id="entry-autocomplete" placeholder="Where did you go?" type="text" name="name">
+            <form class="form-group" id="entry_form" action="/add-entry/{{ trip.trip_id }}" method="POST" enctype="multipart/form-data"> 
+              <input class="form-control" id="entry-autocomplete" placeholder="Where did you go?" type="text" name="name">
                 <br>Address: 
-              <input type="text" id="address" name="address" required><br>
-              <textarea name="notes" placeholder="Add any notes..."></textarea><br>
-              <select name="category">
+              <input class="form-control" type="text" id="address" name="address" required><br>
+              <textarea class="form-control" name="notes" placeholder="Add any notes..."></textarea><br>
+              <select class="custom-select" name="category">
                  <option selected disabled>Select a category</option>
                  {% for category in categories %}
                  <option value="{{ category.category_id }}">{{ category.name }}</option>
                  {% endfor %}
               </select><br>
-              <input type="file" id="imageinput" name="pic"><br>
-              <input type="submit" id="submit_button">
+              <label class="custom-file">
+                <input type="file" id="file" class="custom-file-input" name="pic">
+                <span class="custom-file-control"></span>
+              </label>
+              <!-- <input type="file" id="imageinput" name="pic"><br> -->
+              <button class="classic-button" type="submit" id="add-entry-submit">Submit</button>
             </form>
           </div>
       </div>
@@ -65,9 +70,10 @@
         <div class="form-content">
           <span class="close" id="closeShareTrip">&times;</span>
           <h2>Share Trip</h2>
-            <form id="share_form" method="POST">Who would you like to share this trip with?<br>
-              <input id="shareEmail" placeholder="Email Address" type="text" name="shareEmail">
-              <input type="submit" id="share_submit_button">
+            <form class="form-group" id="share_form" method="POST">Who would you like to share this trip with?<br>
+              <input class="form-control" id="shareEmail" placeholder="Email Address" type="text" name="shareEmail">
+              <!-- <input type="submit" id="share_submit_button"> -->
+              <button class="classic-button" type="submit" id="share-trip-submit">Submit</button>
             </form>
             <form id="invite_form" action="/invite-user" method="POST" hidden>This user does not exist would you like to invite them to join SOJOURNAL?<br>
               <input id="inviteEmail" placeholder="Email Address" type="text" name="inviteEmail">

@@ -72,6 +72,7 @@ function codeTripMarkerAddress(address, name, contentString) {
           map: map,
           position: results[0].geometry.location,
           animation: google.maps.Animation.DROP,
+          icon: '/static/unlabled_marker.png',
           title: name
       });
       visibleMarkers.push(marker);
@@ -186,7 +187,6 @@ function initTripMap() {
   addEntryMarkers();
 }
 
-
 function initEntryAutocomplete() {
   // Create the autocomplete object, restricting the search to geographical
   // location types.
@@ -194,7 +194,6 @@ function initEntryAutocomplete() {
       /** @type {!HTMLInputElement} */(document.getElementById('entry-autocomplete')),
       {types: ['establishment']});
   entryAutocomplete.addListener('place_changed', fillInAddress);
-
 }
 
 function fillInAddress() {
@@ -277,14 +276,15 @@ function addEntryMarkers() {
   var photo = $(this).children(".entry-photo").html();
   var notes = $(this).children(".entry-notes").html();
   var link = $(this).children(".entry-link").children(".entry-name").attr("href");
-  var contentString = '<div id="content">'+
-      '<span id="popupBanner"><h1 id="popupHeader"><a href=\"' + link + '\">' + name + '</a></h1></span>'+
-      '<img src=\"/'+photo+'\" width="300"</img>'+
-      '<div id="bodyContent">'+
-      '<img src=\"'+category+'\"></img>'+
-      '<p>'+address+'</p>'+
-      '<p>'+notes+'</p>'+
-      // '<img src=\"/'+photo+'\" height="100"</img>'+
+  var contentString = '<div id="popup-content">'+
+      '<div id="popup-banner"><h3><a class="trip-link-text" href=\"' + link + '\">' + name + '</a></h3></div>'+
+      '<img class="popup-photo" src=\"/'+photo+'\" width="300"</img>'+
+      '<div class="popup-location">'+
+      '<img class="popup-category" src=\"'+category+'\"></img>'+
+      '<p class="popup=address">'+address+'</p>'+
+      '</div>'+
+      '<div class="popup-notes">'+
+      '<p>Notes:<br>'+notes+'</p>'+
       '</div>'+
       '</div>';
   codeEntryMarkerAddress(address, name, markerIcon, contentString);
