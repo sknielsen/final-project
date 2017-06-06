@@ -1,28 +1,46 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="landing-page">
-<div>
+<!-- <div> -->
     <h2>Friends</h2>
-    <button class="addNewButton" id="requestFriend">Request Friend</button>
-    <ul>Friend Requests
-    {% if not friend_requests %}
-      <p>You dont have any outstanding friend requests!</p>
-    {% else %}
-      {% for friend in friend_requests %}
-      <li>{{ friend.requester.name }}<div class="accepted-action" name="{{ friend.friend_id }}"><button name="{{ friend.friend_id }}" class="accepted-friend">Accept</button><button name="{{ friend.friend_id }}" class="denied-friend">Deny</button></div></li>
-      {% endfor %}
-    {% endif %}
-  </ul>
-    <ul>Your Friends
-    {% if not friends %}
-      <p>You dont have any friends yet!</p>
-    {% else %}
-      {% for friend in friends %}
-        <li>{{ friend.name }}</li>
-      {% endfor %}
-    {% endif %}
-    </ul>
+    <button class="classic-button" id="requestFriend">Request Friend</button><br>
+    <div class="table-container">
+      <table class="table table-striped table-bordered" id="friend-request-table">
+        <tr>
+        <th>Friend Requests</th>
+      </tr>
+      {% if not friend_requests %}
+        <tr>
+          <td>You dont have any friends yet!</td>
+        </tr>    
+        {% else %}
+        {% for friend in friend_requests %}
+        <tr>
+          <td>{{ friend.requester.name }}<span class="accepted-action" name="{{ friend.friend_id }}"><button name="{{ friend.friend_id }}" class="accepted-friend classic-button" id="accept-friend">Accept</button><button name="{{ friend.friend_id }}" class="denied-friend classic-button" id="deny-friend">Deny</button></span></td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
   </div>
+  <div class="table-container">
+    <table class="table table-striped table-bordered" id="friends-table">
+      <tr>
+        <th>Friends</th>
+      </tr>
+        {% if not friends %}
+        <tr>
+          <td>You dont have any friends yet!</td>
+        </tr>
+      {% else %}
+        {% for friend in friends %}
+          <tr>
+            <td>{{ friend.name }}</td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+  </div>
+<!-- </div> -->
 
 <!--Friend Modal-->
   <div id="friend-form-popup" class="modal">
@@ -34,8 +52,8 @@
           <input type="submit" id="request_submit_button">
         </form>
         <form id="invite_friend_form" action="/invite-user" method="POST" hidden>This user does not exist would you like to invite them to join SOJOURNAL?<br>
-              <input id="inviteFriendEmail" placeholder="Email Address" type="text" name="inviteEmail">
-              <input type="submit" id="invite_friend_submit_button">
+          <input id="inviteFriendEmail" placeholder="Email Address" type="text" name="inviteEmail">
+          <input type="submit" id="invite_friend_submit_button">
         </form>
       </div>
     </div>

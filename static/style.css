@@ -35,6 +35,7 @@ body {
     height: 100%;
     border-radius: 10px;
     margin-top: 30px;
+    padding: 10px;
 }
 
 #trip-banner {
@@ -94,6 +95,16 @@ body {
 #filter-entries {
     position: absolute;
     right: 40px;
+}
+
+.accepted-action {
+    text-align: right;
+}
+
+#deny-friend, #accept-friend{
+    width: 60px;
+    border-radius: 5px;
+    /*margin: 0;*/
 }
 
 #filter-submit {
@@ -288,6 +299,24 @@ body {
     margin: 10px;
     text-align: center;
     padding: 20px;
+}
+
+.table-container {
+    display: inline-block;
+    width:400px;
+    vertical-align: top;
+    margin: 20px;
+    /*margin:0 auto;*/
+}
+
+th {
+    text-align: center;
+    font-size: 20px;
+    border: 1px solid #4a4a4a;
+}
+
+td {
+    text-align: left;
 }
 
 /* The Modal (background) */

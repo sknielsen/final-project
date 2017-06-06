@@ -220,6 +220,7 @@ def share_trip(trip_id):
         share_results['share_status'] = 'no user'
         return jsonify(share_results)
 
+
 @app.route('/request-friend.json', methods=['POST'])
 def request_friend():
     """initiate friend request"""
@@ -231,8 +232,9 @@ def request_friend():
     request_results = {}
     friend = User.query.filter_by(email=friend_email).all()
     if friend:
-        if friend in user.all_friends:
+        if friend[0] in user.all_friends:
             request_results['request_status'] = 'already friends'
+            print request_results
             return jsonify(request_results)
         else:
             friend_id = friend[0].user_id
@@ -266,7 +268,7 @@ def show_friends():
     user = User.query.get(user_id)
     friends = user.all_friends
     friend_requests = user.accepted_friends
-    friend_requests = [request for request in friend_requests if not request.accepted]
+    friend_requests = [request for request in friend_requests if request.accepted is None]
 
     return render_template('friends.html', friends=friends, friend_requests=friend_requests)
 
@@ -309,7 +311,7 @@ def share_request():
     link = 'http://localhost:5000/trip/' + trip_id
 
     send_share_request_email(to_email, requester, location, link)
-    
+
     response = {'request_id': trip_id}
     return jsonify(response)
 

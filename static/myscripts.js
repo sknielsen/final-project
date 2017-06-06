@@ -457,6 +457,8 @@ $('#requestFriend').on('click', function() {
 // When the user clicks on <span> (x), close the modal
 $('#closeAddFriend').on('click', function() {
     $('#friend-form-popup').hide();
+    $('#request_form').attr('hidden', false);
+    $('#invite_friend_form').attr('hidden', true);
 });
 
 // When the user clicks anywhere outside of the modal, close it
@@ -483,10 +485,10 @@ function friendRequested(result) {
     $('#invite_friend_form').attr('hidden', false);
     $('#requestEmail').val($('#inviteFriendEmail').val());
   } else if (status.request_status == "already friends") {
-    friendModal.style.display = "none";
+    $('#friend-form-popup').hide();
     flashMessage("You are already friends with that user!");
   } else {
-    friendModal.style.display = "none";
+    $('#friend-form-popup').hide();
     flashMessage("Friend request sent!");
   }
 }
