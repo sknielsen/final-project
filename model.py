@@ -53,8 +53,8 @@ class Entry(db.Model):
 
     entry_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey('trips.trip_id'))
-    name = db.Column(db.String(64), nullable=False)
-    address = db.Column(db.String(64), nullable=False)
+    name = db.Column(db.String(125), nullable=False)
+    address = db.Column(db.String(125), nullable=False)
     notes = db.Column(db.String(255), nullable=True)
     photo_location = db.Column(db.String(255),  nullable=True)
     type_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))

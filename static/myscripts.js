@@ -184,7 +184,7 @@ function initTripMap() {
   geocoder = new google.maps.Geocoder();
   var mapOptions =
   {
-    zoom: 12
+    zoom: 13
   };
   tripMap = new google.maps.Map(document.getElementById('entry-map'), mapOptions);
   codeTripCenterAddress(tripLocation);
@@ -204,7 +204,9 @@ function fillInAddress() {
   // Get the place details from the autocomplete object.
   var place = entryAutocomplete.getPlace();
   var address = place.formatted_address;
+  var locationName = place.name;
   $('#address').val(address);
+  $('#entry-autocomplete').val(locationName);
 }
 
 function codeTripCenterAddress(address) {

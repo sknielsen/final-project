@@ -143,9 +143,9 @@ def add_entry(trip_id):
     entry = Entry(trip_id=trip_id, name=name, address=address, notes=notes,
                   type_id=category)
 
-
     db.session.add(entry)
     db.session.commit()
+
     if 'pic' in request.files:
         file = request.files['pic']
         if file and allowed_file(file.filename):
@@ -159,7 +159,7 @@ def add_entry(trip_id):
     db.session.commit()
     print entry.photo_location
 
-    return redirect('/trip/%s/%s' % (trip_id, entry.entry_id))
+    return redirect('/trip/%s' % (trip_id))
 
 
 @app.route('/entry/<entry_id>')
